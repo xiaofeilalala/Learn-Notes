@@ -277,7 +277,16 @@ OpenType Font 和 TrueType Font。部分的因为这种格式容易被复制(非
 
 
 
-type 属性可以指定不同的文件类型（MIME 类型）
+* rel 属性值表示 `<link>` 项的链接方式与包含它的文档之间的关系
+
+* type 属性可以指定不同的文件类型（MIME 类型）
+
+* sizes 属性表示图标大小
+* media 属性内部进行查询，这种资源将只在满足媒体条件的情况下才被加载进来
+
+```html
+<link rel="icon" type="image/png" sizes="114×114" media="screen and (max-width: 600px)">
+```
 
 图片格式转换网站链接：[Convert image format Online - Image Converter Online - 100% free (jinaconvert.com)](https://jinaconvert.com/)
 
@@ -306,27 +315,204 @@ type 属性可以指定不同的文件类型（MIME 类型）
 
 ## 7. 精灵图
 
+CSS Sprites叫 **CSS精灵或者雪碧图**，是一种网页图片应用处理方式
+
+**精灵图技术产生的目的：**很多大型网页在首次加载的时候都需要加载很多的小图片，而考虑到在同一时间，服务器拥堵的情况下，为了解决这一问题，采用了精灵
+
+图这一技术来缓解加载时间过长从而影响用户体验的这个问题
+
+**精灵图技术的本质：**所谓精灵图就是把很多的小图片合并到一张较大的图片里，所以在首次加载页面的时候，就不用加载过多的小图片，只需要加载出来将小图片
+
+合并起来的那一张大图片也就是精灵图即可，这样在一定程度上减少了页面的加载速度，也一定程度上缓解了服务器的压力
+
+
+
+通过 background-position 属性来实现，起始坐标点是(0,0)，第一个值是水平位置，第二个值是垂直位置，可以为负数
+
+**x 轴右边是正数，左边是负数，y 轴同理**
+
+```css
+div {
+	display: inline-block;
+	margin-right: 20px;
+	background: url("http://pic.616pic.com/ys_bnew_img/00/40/48/YEilzWHDbk.jpg") no-repeat;
+	width: 80px;
+	height: 100px;
+}
+
+.j {
+	background-position: -345px -180px;
+}
+
+.s {
+	background-position: -272px -424px;
+}
+
+.x {
+	background-position: -293px -543px;
+}
+```
+
+
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211204224351.png)
+
 
 
 ## 8. css三角形
 
+css三角形原理：
+
+1、通过只设置一个边框为有色，其余边框为透明色
+
+2、三角形大小受非同向的两边框宽度影响
+
+```css
+  .div {
+    width: 0;
+    height: 0;
+    /* 上下边框宽度是 40px */
+    border-top: 40px solid yellow;
+    border-bottom: 40px solid blue;
+    /* 左右边框宽度是 60px */
+    border-left: 40px solid green;
+    border-right: 40px solid red;
+  }
+```
+
+* 左右边框的宽度相等时，就是等边的三角形
+* 左右边框宽度不相等时，就不是等边的三角形
+* 左右边框某个宽度 0 时，就是直角三角形
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211204205121.png)
 
 
-## 9. 字体溢出省略
+
+## 9. 字体溢出省略号
+
+**单行文本溢出**
+
+```css
+.hidden {
+  overflow: hidden; /* 文字长度超出限定宽度，则隐藏超出的内容 */
+  white-space: nowrap; /* 设置文字在一行显示，不能换行 */
+  text-overflow: ellipsis; /* 规定当文本溢出时，显示省略符号来代表被修剪的文本 */
+}
+```
 
 
+
+**多行文本溢出**
+
+> **Tips：**多行文本溢出不能设置元素高度，否则展示有问题的显示
+
+line-clamp 属性只在 webkit 内核的浏览器中支持
+
+```css
+.hidden {
+  -webkit-line-clamp: 2; /* 用来限制在一个块元素显示的文本的行数，2 表示最多显示 2 行。为了实现该效果，它需要组合其他的 WebKit 属性 */
+  display: -webkit-box; /* 和 1 结合使用，将对象作为弹性伸缩盒子模型显示 */
+  -webkit-box-orient: vertical;/* 和 1 结合使用 ，设置或检索伸缩盒对象的子元素的排列方式 */
+  overflow: hidden; /* 文本溢出限定的宽度就隐藏内容 */
+  text-overflow: ellipsis; /* 多行文本的情况下，用省略号 “…” 隐藏溢出范围的文本 */
+}
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211204211652.png)
 
 ## 10. 鼠标样式
 
+**`cursor`** 属性设置光标的类型（如果有），在鼠标指针悬停在元素上时显示相应样式
+
+* cursor 属性为零个或多个 cursor 值，它们之间用逗号分隔，最后必填一个关键字值。
+
+* 每个 url 指向一个图像文件。浏览器将尝试加载指定的第一个图像，如果无法加载则返回下一个图像，如果无法加载图像或未指定图像，则使用关键字值代表的指针类型。
+
+* 每个 url 后面都可选跟一对空格分隔的数字 `x` `y` 表示偏移。它们用来设置指针的热点(即自定义图标的实际点击位置)，位置相对于图标的左上角
+* 最后提供一个关键字值作为备用
+
+```css
+/* 关键字值 */
+cursor: pointer;
+cursor: auto;
+
+/* 使用URL，并提供一个关键字值作为备用 */
+cursor: url(hand.cur), pointer;
+
+/* URL和xy的坐标偏移值，最后提供一个关键字值作为备用 */
+cursor:  url(cursor1.png) 4 12, auto;
+cursor:  url(cursor2.png) 2 2, pointer;
+
+/* 全局属性 */
+cursor: inherit;
+cursor: initial;
+cursor: unset;
+```
+
+| 值        | 描述                                                         |
+| :-------- | :----------------------------------------------------------- |
+| *url*     | 需使用的自定义光标的 URL。注释：请在此列表的末端始终定义一种普通的光标，以防没有由 URL 定义的可用光标 |
+| default   | 默认光标（通常是一个箭头）                                   |
+| auto      | 默认。浏览器设置的光标。                                     |
+| crosshair | 光标呈现为十字线                                             |
+| pointer   | 光标呈现为指示链接的指针（一只手）                           |
+| move      | 此光标指示某对象可被移动                                     |
+| e-resize  | 此光标指示矩形框的边缘可被向右（东）移动                     |
+| ne-resize | 此光标指示矩形框的边缘可被向上及向右移动（北/东）            |
+| nw-resize | 此光标指示矩形框的边缘可被向上及向左移动（北/西）            |
+| n-resize  | 此光标指示矩形框的边缘可被向上（北）移动                     |
+| se-resize | 此光标指示矩形框的边缘可被向下及向右移动（南/东）            |
+| sw-resize | 此光标指示矩形框的边缘可被向下及向左移动（南/西）            |
+| s-resize  | 此光标指示矩形框的边缘可被向下移动（南）                     |
+| w-resize  | 此光标指示矩形框的边缘可被向左移动（西）                     |
+| text      | 此光标指示文本                                               |
+| wait      | 此光标指示程序正忙（通常是一只表或沙漏）                     |
+| help      | 此光标指示可用的帮助（通常是一个问号或一个气球）             |
 
 
-## 11. 文本域样式属性
+
+## 11. 用户调整元素尺寸
+
+> **Tips：**如果一个 block 元素的 overflow 属性被设置成了`visible`，那么`resize`属性对该元素无效
+
+resize 属性规定可以由用户调整元素的大小
+
+如果希望此属性生效，需要设置元素的 overflow 属性，值可以是 auto、hidden 或 scroll
+
+```css
+resize: none|both|horizontal|vertical;
+```
+
+* none：用户无法调整元素的尺寸
+* both：用户可调整元素的高度和宽度
+* horizontal：用户可调整元素的宽度
+* vertical：用户可调整元素的高度
+
+
+
+**禁止文本域拖拽**
+
+```css
+textarea {
+    resize: none;
+}
+```
 
 
 
 ## 12. 图片底部空白
 
+一个line box，如果里面没有 inline 内联元素，或者overflow 不是 visible，则该元素的基线就是其margin 底边缘，否则其基线就是元素里面最后一行内联元素的基线
 
+line box中图片默认和文本基线对齐，如果使用基线对齐，该行内若有文字，文字的底线与基线之间有距离，此时文字就会顶起来一段距离
 
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211204215652.png)
 
+ **解决方法：**
+
+1、使用其它 vertical-align 值：将 vertical-align 属性变为 bottom，表示对底边齐父元素下行高边框
+
+2、让 vertical-align 失效：将 img 标签设置为 display：block，vertical-align 只能改变行内或行内块元素
+
+3、直接修改 line-height 值：空隙高度，实际上是文字计算后的行高值和字体内容区域（content-area）下边缘的距离，只要行高足够小，实际文字占据的高度小于字体内容区域（content-area），就不会出现空白空隙了
 
