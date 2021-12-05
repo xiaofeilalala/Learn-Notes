@@ -172,9 +172,9 @@ Unicode 使用步骤如下：
 
 * **src**：
 
-  * url：加载字体，可以是相对路径，可以是绝对路径，也可以是网络地址
+  * **url：**加载字体，可以是相对路径，可以是绝对路径，也可以是网络地址
 
-  * format：定义的字体的格式，用来帮助浏览器识别。主要取值为：truetype(.ttf)、opentype(.otf）、truetype-aat、embedded-opentype(.eot)、svg(.svg)、woff(.woff)
+  * **format：**定义的字体的格式，用来帮助浏览器识别。主要取值为：`truetype(.ttf)`、`opentype（.otf)`、`truetype-aat`、`embedded-opentype(.eot)`、`svg(.svg)`、`woff(.woff)`
 
 * **font-weight**：定义加粗样式
 
@@ -256,9 +256,18 @@ OpenType Font 和 TrueType Font。部分的因为这种格式容易被复制(非
 
 者的喜爱
 
-
+| String            | Font Format                      | Common extensions |
+| ----------------- | -------------------------------- | ----------------- |
+| woff              | WOFF 1.0（Web Open Font Format） | `.woff`           |
+| woff2             | WOFF 2.0（Web Open Font Format） | `.woff2`          |
+| truetype          | TrueType                         | `.ttf`            |
+| opentype          | OpenType                         | `.ttf`、`.otf`    |
+| embedded-opentype | Embedded OpenType                | `.eot`            |
+| svg               | SVG Font                         | `.svg`、`.svgz`   |
 
 ![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211202210100.png)
+
+
 
 ## 4. title 图标
 
@@ -290,6 +299,8 @@ OpenType Font 和 TrueType Font。部分的因为这种格式容易被复制(非
 
 图片格式转换网站链接：[Convert image format Online - Image Converter Online - 100% free (jinaconvert.com)](https://jinaconvert.com/)
 
+
+
 | 缩写                                                         | 文件格式                                                   | MIME 类型       | 文件拓展名                                 | 浏览器兼容性                                            |
 | :----------------------------------------------------------- | :--------------------------------------------------------- | :-------------- | :----------------------------------------- | :------------------------------------------------------ |
 | [APNG](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/img#apng) | Animated Portable Network Graphics **动态便携式网络图像**  | `image/apng`    | `.apng`                                    | Chrome, Edge, Firefox, Opera, Safari                    |
@@ -305,15 +316,541 @@ OpenType Font 和 TrueType Font。部分的因为这种格式容易被复制(非
 
 
 
-## 5. 垂直居中
+## 5. css 居中详解
 
 
 
-## 6. 布局技巧
+### 5-1 水平居中
+
+利用 `text-align: center` 可以实现块级元素内部的内联元素水平居中（内联元素 `line`，内联块 `inline-block`，内联表格 `inline-table`，`inline-flex` 元素）
+
+```css
+.box {
+	text-align: center;
+}
+/* 利用 text-align: center 可以实现块级元素内部的内联元素水平居中 */    
+.content-box {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #ff7b00;
+}
+
+<div class="box">
+    <div class="content-box"></div>
+</div>
+```
 
 
 
-## 7. 精灵图
+通过固定宽度块级元素的 `margin-left` 和 `margin-right` 设成 `auto`，就可以使块级元素水平居中
+
+```css
+.block-box {
+	width: 100px;
+	height: 100px;
+	background-color: #9900ff;
+	margin: 0 auto;
+    /* 对固定宽度的块级元素，通过设置元素左右外边距为auto,即可实现元素水平居中 */
+}
+
+<div class="block-box"></div>
+```
+
+
+
+（不需要设置元素宽高）利用弹性布局，实现水平居中，其中 `justify-content` 用于设置弹性盒子元素在主轴方向上的对齐方式
+
+```css
+.flex-box {
+	display: flex;
+	justify-content: center;
+    /* 需要对水平对齐元素父元素设置 */
+    /* 利用弹性布局 使用 justify-conten 属性在主轴方向上的对齐方式 */
+}
+.flex-box .content-box {
+	width: 100px;
+	height: 100px;
+	background-color: #9dff00;
+}
+
+<div class="flex-box">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+（不需要设置元素宽高）通过 `position`，`left/right` 和 transform 属性水平居中
+
+```css
+.position-box {
+	width: 100px;
+	height: 100px;
+	background-color: #ee5f66;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%, 0);
+    /* 给元素设置定位relative 给定left/right一半值，通过transform属性偏移元素自身一半的宽度 */
+}
+
+<div class="position-box"></div>
+```
+
+
+
+> **Tips：**在标准文档流中，水平方向不会出现左右外边距重叠现象，所以在使用 position 定位时可以使用 relative/absolute
+
+（需要设置元素宽高）使用 `position` 以及负值的 `margin-left` 水平居中
+
+```css
+.burden-box .content-box {
+	position: absolute;
+	left: 50%;
+	width: 100px;
+	height: 100px;
+	background-color: #5fe4ee;
+	margin-left: -50px;
+    /* 负值的margin-left */
+}
+
+<div class="burden-box">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+（不需要设置元素宽高）使用 `position` 以及`left:0;`，`right:0`， `margin:0 auto` 水平居中
+
+```css
+.auto-box .content-box {
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: 100px;
+	height: 100px;
+	background-color: #eeec5f;
+	margin: 0 auto;
+    /* 使用绝对定位方式, 以及left:0; right:0; margin:0 auto; */
+}
+
+<div class="auto-box">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+### 5-2 垂直居中
+
+通过设置内联元素的高度 `height` 和行高 `line-height` 相等，从而使元素垂直居中（使元素垂直居中使用 `vertical-align: middle`）
+
+这种方法比较适合文字的居中，其核心是设置行高（line-height）等于包裹他的盒子的高，或者不设高度只设行高，这种适合文字居中且高度固定的场景
+
+```css
+.box {
+    /* 适用于文本垂直场景 使元素垂直居中使用 vertical-align: middle */
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #ff7b00;
+	vertical-align: middle;
+}
+
+<div class="container">
+    文本
+    <div class="box"></div>
+</div>
+```
+
+
+
+行内块级元素, 使用 `display: inline-block`, `vertical-align: middle` 加上伪元素辅助实现
+
+```css
+.container.before::before {
+	content: "";
+	display: inline-block;
+	width: 0;
+	height: 100%;
+	vertical-align: middle;
+}
+/* 在父元素中设置一个行内的伪元素,让行内的子元素与这个伪元素垂直对齐 */
+.pseudo-box {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #66ff00;
+	vertical-align: middle;
+}
+
+<div class="container before">
+    <div class="pseudo-box"></div>
+</div>
+```
+
+
+
+通过 `vertical-align` 属性, 而 `vertical-align` 只有在父层为 `td` 或者 `th` 时, 才会生效, 对于其他块级元素, 例如 `div`、`p` 等, 默认情况是不支持的. 为了使用`vertical-align`, 我们需要设置父元素 `display:table`, 子元素 `display:table-cell`，`vertical-align:middle`
+
+在表单元格中，这个属性会设置单元格框中的单元格内容的对齐方式
+
+```css
+.container.table {
+	width: 100%;
+	display: table;
+}     
+/* 设置为table布局 然后设置为单元格 通过vertical-align属性设置单元格对齐方式 */
+.table-box {
+	display: table-cell;
+	vertical-align: middle;
+}
+.last-box {
+	width: 100px;
+	height: 100px;
+	background-color: #0059ff;
+}
+
+<div class="container table">
+    <div class="table-box">
+        <div class="last-box"></div>
+    </div>
+</div>
+```
+
+
+
+（不需要设置元素宽高）利用弹性布局，实现垂直居中，其中 `align-items: center` 用于设置弹性盒子元素在竖轴方向上的对齐方式
+
+```css
+.flex-box {
+	display: flex;
+	align-items: center;
+	height: 200px;
+	background-color: #f5f5f5;
+	margin-bottom: 20px;
+    /* 需要对垂直对齐元素父元素设置 */
+    /* 利用弹性布局 使用 align-items 属性在竖轴方向上的对齐方式 */
+}
+
+.flex-box .content-box {
+	width: 100px;
+	height: 100px;
+	background-color: #9900ff;
+}
+
+<div class="flex-box">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+> **Tips：**在标准文档流中，竖直方向会出现上下外边距重叠现象，所以在使用 position 定位时必须使用 absolute 触发BFC
+
+（不需要设置元素宽高）通过 `position`，`top/bottom` 和 transform 属性垂直居中
+
+```css
+.position {
+    position: relative;
+}
+.position-box .content-box {
+	width: 100px;
+	height: 100px;
+	background-color: #ee5f66;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+    /* 给元素设置定位 给定top/bottom一半值，通过transform属性偏移元素自身一半的宽度 */
+}
+
+<div class="position-box container">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+（需要设置元素宽高）使用 `position` 以及负值的 `margin-top` 垂直居中
+
+```css
+.burden-box {
+    position: relative;
+}
+.burden-box .content-box {
+	position: absolute;
+	top: 50%;
+	width: 100px;
+	height: 100px;
+	background-color: #5fe4ee;
+	margin-top: -50px;
+    /* 负值的margin-top */
+}
+
+<div class="burden-box container">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+（不需要设置元素宽高）使用 `position` 以及`top:0;`，`bottom:0`， `margin:auto 0` 垂直居中
+
+```css
+.auto-box {
+   position: relative; 
+}
+.auto-box .content-box {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100px;
+	height: 100px;
+	background-color: #eeec5f;
+	margin: auto 0;
+    /* 使用绝对定位方式, 以及top:0; bottom:0; margin:0 auto; */
+}
+
+<div class="auto-box container">
+    <div class="content-box"></div>
+</div>
+```
+
+
+
+### 5-3 水平垂直居中
+
+`text-align` + `line-height` + `vertical-align`（行内元素/行内块元素|父元素需要设置高度，子元素可以不设置高度）
+
+```css
+.container {
+	background-color: #f5f5f5;
+	text-align: center;
+	height: 200px;
+	line-height: 200px;
+	margin-bottom: 20px;
+}
+
+.container .box {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+	vertical-align: middle;
+}
+
+<div class="container">
+	<div class="box"></div>
+</div>
+
+```
+
+
+
+`position` + `margin-top/margin-bottom` （块级元素/行内元素/行内块元素|子元素需要设置高度）
+
+```css
+.position-box {
+	position: relative;
+	background-color: #f5f5f5;
+	text-align: center;
+	height: 200px;
+	margin-bottom: 20px;
+}
+
+.margin-box {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -50px;
+	margin-left: -50px;
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+}
+
+<div class="position-box">
+	<div class="margin-box"></div>
+</div>
+```
+
+
+
+`position` + `transform` （块级元素/行内元素/行内块元素）
+
+```css
+.position-box {
+	position: relative;
+	background-color: #f5f5f5;
+	text-align: center;
+	height: 200px;
+	margin-bottom: 20px;
+}
+.transform-box {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+}
+
+
+<div class="position-box">
+	<div class="transform-box"></div>
+</div>
+```
+
+
+
+`display: table` + `display: table-cell` + `text-align` + `vertical-center` （行内元素/行内块元素）
+
+```css
+.table-box {
+	display: table;
+	width: 100%;
+	background-color: #f5f5f5;
+	margin-bottom: 20px;
+	height: 200px;
+}
+
+.table-box .cell-box {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.table-box .cell-box .box {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+}
+
+<div class="table-box">
+	<div class="cell-box">
+		<div class="box"></div>
+	</div>
+</div>
+```
+
+
+
+伪元素 + `text-align` + `vertical-center` （行内元素/行内块元素|父元素需要设置高度）
+
+```css
+.false-box {
+	background-color: #f5f5f5;
+	margin-bottom: 20px;
+	height: 200px;
+	text-align: center;
+}
+
+.false-box::before {
+	display: inline-block;
+	content: "";
+	height: 100%;
+	width: 0;
+	vertical-align: middle;
+}
+
+.false-box .box {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+	vertical-align: middle;
+}
+
+<div class="false-box">
+	<div class="box"></div>
+</div>
+```
+
+
+
+`position` + `top/right/bottom/left: 0` + `margin` （块级元素/行内元素/行内块元素|子元素需要设置高度）
+
+```css
+.auto-box {
+	position: relative;
+	background-color: #f5f5f5;
+	margin-bottom: 20px;
+	height: 200px;
+}
+
+.auto-box .box {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+	margin: auto;
+}
+
+<div class="auto-box">
+	<div class="box"></div>
+</div>
+```
+
+
+
+`flex` + `align-items` + `justify-content` （块级元素/行内元素/行内块元素）
+
+```css
+.flex-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 200px;
+	background-color: #f5f5f5;
+	margin-bottom: 20px;
+}
+
+.flex-box .box {
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+}
+
+<div class="flex-box">
+	<div class="box"></div>
+</div>
+```
+
+
+
+`grid` + `justify-items` + `align-items` （块级元素/行内元素/行内块元素）
+
+```css
+.grid-box {
+	display: grid;
+	height: 200px;
+	background-color: #f5f5f5;
+	grid-template-columns: repeat(1, 1fr);
+	justify-items: center;
+	align-items: center;
+}
+
+.grid-box .box {
+	width: 100px;
+	height: 100px;
+	background-color: #008cff;
+}
+
+<div class="grid-box">
+	<div class="box"></div>
+</div>
+```
+
+
+
+## 6. 精灵图
 
 CSS Sprites叫 **CSS精灵或者雪碧图**，是一种网页图片应用处理方式
 
@@ -359,7 +896,7 @@ div {
 
 
 
-## 8. css三角形
+## 7. css三角形
 
 css三角形原理：
 
@@ -388,7 +925,7 @@ css三角形原理：
 
 
 
-## 9. 字体溢出省略号
+## 8. 文本溢出省略号
 
 **单行文本溢出**
 
@@ -420,7 +957,7 @@ line-clamp 属性只在 webkit 内核的浏览器中支持
 
 ![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20211204211652.png)
 
-## 10. 鼠标样式
+## 9. 鼠标样式
 
 **`cursor`** 属性设置光标的类型（如果有），在鼠标指针悬停在元素上时显示相应样式
 
@@ -471,7 +1008,7 @@ cursor: unset;
 
 
 
-## 11. 用户调整元素尺寸
+## 10. 用户调整元素尺寸
 
 > **Tips：**如果一个 block 元素的 overflow 属性被设置成了`visible`，那么`resize`属性对该元素无效
 
@@ -500,7 +1037,7 @@ textarea {
 
 
 
-## 12. 图片底部空白
+## 11. 图片底部空白
 
 一个line box，如果里面没有 inline 内联元素，或者overflow 不是 visible，则该元素的基线就是其margin 底边缘，否则其基线就是元素里面最后一行内联元素的基线
 
