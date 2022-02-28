@@ -2,9 +2,7 @@
 
 
 
-## 1. String 字符串 
-
-
+## 1. String 字符串类型
 
 ### 1-1 字符串引号
 
@@ -170,8 +168,6 @@ console.log('java \r script'); // java  script
 
 ## 3. 字符串方法
 
-
-
 ### 3-1 length 属性
 
 字符串是由若干个字符组成的，这些字符的数量就是字符串的长度。我们可以通过字符串的 `length` 属性可以获取整个字符串的长度
@@ -328,8 +324,6 @@ console.log(newStr); // jsx❤ljj
 
 
 ## 4. 查找子字符串
-
-
 
 ### 4-1 `seach()` 
 
