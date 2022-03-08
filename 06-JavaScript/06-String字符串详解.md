@@ -323,6 +323,31 @@ console.log(newStr); // jsx❤ljj
 
 
 
+### 3-8 字符串分隔
+
+`str.split(delim, length)`
+
+通过给定的分隔符将字符串分割成一个数组
+
+* `length` 对数组长度的限制，如果使用参数，那么超出长度限制的元素会忽略
+* 带有空参数的 `split()`，会将字符串拆分为字母数组
+
+```js
+// split() 通过分隔符将字符串分隔为一个数组
+let str = 'javascript';
+
+// 空参数会将字符串拆分为单个字母
+console.log(str.split('')); // ['j', 'a', 'v', 'a', 's', 'c', 'r', 'i', 'p', 't']
+
+let str1 = 'jsx, ljj, ddc, zdj';
+console.log(str1.split(',')); // ['jsx', ' ljj', ' ddc', ' zdj']
+
+// 第二个参数控制数组长度，超出设置的长度会忽略
+console.log(str1.split(',', 2)); // ['jsx', ' ljj']
+```
+
+
+
 ## 4. 查找子字符串
 
 ### 4-1 `seach()` 
