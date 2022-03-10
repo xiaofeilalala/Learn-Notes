@@ -299,5 +299,282 @@ for (let key in arr) {
 
 
 
-## 6. 迭代器对象
+## 6. 迭代器和可迭代对象
 
+### 6-1 迭代器
+
+迭代器 `iteration` 它是一种接口，为各种不同的数据结构提供统一的访问机制，任何数据结构只要部署 `Iterator` 接口，就可以完成遍历操作
+
+`Iterator` 的作用有三个：
+
+* 为各种数据结构，提供一个统一的、简便的访问接口
+* 使得数据结构的成员能够按某种次序排列
+*  `Iterator` 接口主要供 `for...of` 消费
+
+`Iterator` 迭代过程：
+
+* 创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象
+* 这个对象里面有一个`next`方法，然后调用该 `next` 方法，移动指针使得指针指向数据结构中的第一个元素
+
+* 每调用一次 `next` 方法，指针就指向数据结构里的下一个元素，这样不断的调用`next` 方法就可以实现遍历元素的效果了
+* 每一次调用 `next` 方法，都会返回数据结构的当前成员的信息，返回一个包含`value`和`done`两个属性的对象
+  * `value`属性是当前成员的值
+  * `done`属性是一个布尔值，表示遍历是否结束，没有结束返回 `false`，结束为 `true`
+
+```js
+function myiteration(arr) {
+	let index = 0;
+	return {
+		next: function() {
+			return index < arr.length ? 
+                {value: arr[index++], done: false} : 
+                {value: undefined, done: true}
+		}
+	}
+}
+let result = myiteration([3, 4, 5]);
+console.log(result.next()); // {value: 3, done: false}
+console.log(result.next()); // {value: 4, done: false}
+console.log(result.next()); // {value: 5, done: false}
+console.log(result.next()); // {value: undefined, done: true}
+```
+
+
+
+### 6-2 可迭代对象
+
+ES6 规定，默认的 `Iterator` 接口部署在数据结构的 `Symbol.iterator` 属性
+
+一个数据结构只要具有 `Symbol.iterator` 属性，就可以认为是可迭代的（iterable）
+
+`Symbol.iterator` 属性本身是一个函数，就是当前数据结构默认的遍历器生成函数。执行这个函数，就会返回一个遍历器
+
+```js
+// 普通对象转换为可迭代对象
+let obj = {
+	name: 'jsx',
+	age: 22
+}
+let arr1 = [];
+for (let i in obj) {
+	let obj1 = {};
+	obj1[i] = obj[i]
+	arr1.push(obj1);
+}
+obj.date = arr1;
+
+obj[Symbol.iterator] = function() {
+	let self = this;
+	let index = 0;
+	return {
+		next: function() {
+			if (index < self.date.length) {
+				return {
+					value: self.date[index++],
+					done: false
+				}
+			}
+			return {
+				value: undefined,
+				done: true
+			}
+		}
+	}
+}
+
+for (let i of obj) {
+	console.log(i);
+}
+// {name: 'jsx'}
+// {age: 22}
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220310174756.png)
+
+
+
+`String`、`Array`、`TypedArray`、函数的 `arguments` 对象、`NodeList` 对象、`Map` 和 `Set` 都是内置可迭代对象，因为它们的原型对象都拥有一个 `Symbol.iterator `方法
+
+```js
+let str = 'jsx';
+let result = str[Symbol.iterator]();
+console.log(result); // StringIterator {}
+console.log(result.next());
+```
+
+
+
+### 6-3 数组迭代方法
+
+在ES6中，Array的原型上暴露了3个用于检索数组内容的方法：`keys()`、`values()`、`entries()`
+
+* `arr.keys()` 返回数组索引的迭代器
+* `arr.values()` 方法返回数组元素的迭代器
+* `arr.entries()` 方法返回索引值对的迭代器
+
+这些方法返回的都是迭代器，所以可以将他们的内容通过 `Array.from` 直接转化为数组实例
+
+```js
+let arr = ['html', 'css', 'js', 'vue']
+console.log(arr);
+console.log(Array.from(arr.keys())); // [0, 1, 2, 3]
+console.log(Array.from(arr.values())); // ['html', 'css', 'js', 'vue']
+console.log(Array.from(arr.entries())); // [[0, 'html'], [1, 'css'], [2, 'js'], [3, 'vue']]
+```
+
+
+
+## 7. 类数组
+
+### 7-1 什么是类数组?
+
+类数组对象，就是指可以**通过索引属性访问元素**并且**拥有 length** 属性的对象
+
+```js
+var arrLike = {
+  0: 'name',
+  1: 'age',
+  2: 'job',
+  length: 3
+}
+```
+
+
+
+在访问、赋值、获取长度时，对类数组对象的操作与对数组是一致的
+
+```js
+let obj = {
+	0: 'jsx',
+	1: 22,
+	length: 2
+}
+console.log(obj) // {0: 'jsx', 1: 22, length: 2}
+// 可以访问元素
+console.log(obj[1]); // 22
+
+// 可以给元素赋值
+obj[0] = 'jsx-ljj';
+console.log(obj);
+
+// 可以获取长度
+console.log(obj.length); // 2
+```
+
+
+
+类数组对象与数组的区别是**类数组对象不能直接使用数组的方法**
+
+类数组对象是对象不是 `Array`,用 `isArray` 判断会返回 `false`
+
+```js
+// 类数组不能用数组的方法
+let obj = {
+	0: 'jsx',
+	1: 22,
+	length: 2
+}
+
+let arr = ['jsx', 'ljj'];
+// 用isArray判断会返回 false
+console.log(Array.isArray(arr)); // true
+console.log(Array.isArray(obj)); // false
+
+obj.push('ljj'); // obj.push is not a function
+```
+
+
+
+### 7-2 类数组场景
+
+- 函数里面的参数对象 `arguments`
+- 用 `getElementsByTagName`/`ClassName/Name` 获得的 `HTMLCollection` `DOM` 元素集合
+- 用 `querySelector`、`querySelectorAll` 获得的 `NodeList` 节点的集合
+
+```html
+<ul>
+    <li class="list">类数组场景</li>
+    <li class="list">类数组场景</li>
+    <li class="list">类数组场景</li>
+    <li class="list">类数组场景</li>
+    <li class="list">类数组场景</li>
+</ul>
+```
+
+```js
+// arguments 函数对象 类数组
+function foo(name, age) {
+	console.log(arguments);
+	console.log(typeof arguments); // object
+	console.log(arguments.length); // 2
+}
+foo('jsx', 22); // ['jsx', 22, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+
+// dom 元素集合 类数组
+let list = document.getElementsByClassName("list");
+console.log(list);
+console.log(typeof list); // object
+
+// nodeList 节点的集合 类数组
+let list1 = document.querySelectorAll("ul > li");
+console.log(list1)
+for (let item of list1) {
+	console.log(item)
+	item.style.color = 'red';
+}
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220310202430.png)
+
+
+
+### 7-3 `Array.from()`
+
+`Array.from(arrayLike, mapFn, thisArg)`
+
+全局方法 `Array.from` 可以接受一个可迭代或类数组的值，并从中获取一个真正的数组，可以对其调用数组方法（该方法会返回一个的数组，不会改变原对象）
+
+伪数组对象（拥有一个 `length` 属性和若干索引属性的任意对象）
+
+可迭代对象（可以获取对象中的元素,如 `Map`和 `Set` 等）
+
+如果不确定返回值，则会返回 `undefined`，最终生成的是一个包含若干个 `undefined` 元素的空数组
+
+* `arrayLike`：想要转换成数组的类数组对象或可迭代对象
+* `mapFn`：如果指定了该参数，新数组中的每个元素会执行该回调函数
+* `thisArg`：可选参数，执行回调函数 `mapFn` 时 `this` 对象
+
+```js
+let obj = {
+	0: 'jsx',
+	1: 22,
+	length: 2
+}
+let newArr = Array.from(obj, function(value, index) {
+	console.table(value, index)
+	return value;
+})
+console.log(newArr); // ['jsx', 22]
+console.log(Array.isArray(newArr)); // true
+```
+
+拥有迭代器的对象还包括 `String`、`Set`、`Map` 等，`Array.from` 都可以进行处理
+
+```javascript
+// String
+Array.from('abc');                             // ["a", "b", "c"]
+// Set
+Array.from(new Set(['abc', 'def']));           // ["abc", "def"]
+// Map
+Array.from(new Map([[1, 'ab'], [2, 'de']]));   // [[1, 'ab'], [2, 'de']]
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220310192321.png)
+
+
+
+### 7-4 其它转换方法
+
+* `Array.prototype.slice.call()` 能将具有`length`属性的对象转成数组
+*  `Array.from(arguments)` 类数组对象和可遍历（`iterable`）对象转成数组
+* ES6 中的扩展运算符`...`

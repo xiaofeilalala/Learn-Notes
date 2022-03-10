@@ -218,7 +218,7 @@ console.log(res.id, res.name); // 1 'John'
 
 ### 2-3 `filter()`
 
-`arr.filter(callback(item, index, arr), thisArg)`
+`let newArr = arr.filter(callback(item, index, arr){}, thisArg)`
 
 用于过滤数组，满足条件的元素会被返回。它的参数是一个回调函数，所有数组元素依次执行该函数，返回结果为 `true` 的元素会被返回
 
@@ -292,7 +292,7 @@ console.log(arr1); // jsx,520,ljj
 
 ### 3-3 `concat()`
 
-`arr.concat(arg1, arg2.., argN)`
+`let newArr = arr.concat(arg1, arg2.., argN)`
 
 用于连接两个或多个数组。该方法不会改变现有的数组，而会创建一个新数组
 
@@ -354,7 +354,7 @@ console.log(arr1); // [2, 1, 'ljj', 'jsx']
   * `a < b` 返回 -1   a 会被排列到 b 之前
   * `a = b` 返回 0   a 和 b 的相对位置不变
   * `a > b` 返回 1  b 会被排列到 a 之前
-* 省略参数，元素按照类型转换后的字符串的各个字符的 `Unicode` 位点进行排序
+* `sort()` 参数省略时，元素按照类型转换后的字符串的各个字符的 `Unicode` 位点进行排序
 
 ```js
 let arr = [1, 2, 'jsx', 3];
@@ -446,9 +446,55 @@ console.log(arr); // ['react', 'vue', 'vue']
 
 ### 6-1 `flat()`
 
+`let newArr = arr.flat(depth)`
+
+`flat()` 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回
+
+* `depth` 可选。指定要提取嵌套数组的结构深度，默认值为 1
+* 如果原数组有空位，`flat()` 方法会跳过空位
+* 如果不管有多少层嵌套，都要转成一维数组，可以用 `Infinity` 关键字作为参数
+
+```js
+// flat() 将数组扁平化
+let arr = [1, [2], [4, [78, [11]]]];
+let arr1 = arr.flat(3)
+console.log(arr1); // [1, 2, 4, 78, 11]
+// 默认值为1
+console.log(arr.flat()); // [1, 2, 4, Array(2)]
+
+// 当数组中有空位时，该方法会跳过
+let arr2 = [1, 2, , ,4, 5];
+console.log(arr2.flat()); // [1, 2, 4, 5]
+
+// 数组多重嵌套扁平为以为数组，可以使用Infinity参数
+console.log(arr.flat(Infinity)); // [1, 2, 4, 78, 11]
+```
+
 
 
 ### 6-2 `flatMap()`
+
+`let newArr = arr.flatMap(callback(current, index, arr){}, thisArg)`
+
+对原数组的每个元素执行一个函数，相当于执行 `Array.prototype.map()` 然后对返回值组成的数组执行 `flat()` 方法。该方法返回一个新数组，不改变原数组
+
+`flatMap()` 只能展开一层数组
+
+* `callback`：可以生成一个新数组中的元素的函数
+  * `current`：当前正在数组中处理的元素
+  * `index`：可选的。数组中正在处理的当前元素的索引
+  * `array`：可选的。被调用的 `map` 数组
+
+* `thisArg`：执行 `callback` 函数时 使用的`this` 值
+
+```js
+let arr = ['jsx', '', 'ljj'];
+let arr1 = arr.map(current => current.split(' '));
+console.log(arr1); // [Array(1), Array(1), Array(1)]
+
+let arr2 = arr.flatMap(current => current.split(' '));
+console.log(arr2); // ['jsx', '', 'ljj']
+```
 
 
 
@@ -456,37 +502,196 @@ console.log(arr); // ['react', 'vue', 'vue']
 
 ### 7-1 `forEach`
 
+`arr.forEach(function(item, index, array){}, thisArg)`
+
+按升序为数组中含有效值的每一项元素执行一次 `callback` 函数，该方法没有返回值 `undefined`，**会改变原始数组**
+
+还可以有第二个参数，用来绑定回调函数内部 `this` 变量
+
+* 如果 `thisArg` 参数有值，则每次 `callback` 函数被调用时，`this` 都会指向 `thisArg` 参数
+* 如果省略了 `thisArg` 参数，或者其值为 `null` 或 `undefined`，`this` 则指向全局对象
+
+> **Tips：**回调函数不能是箭头函数，因为箭头函数没有 `this`
+
+```js
+let arr = ['html', 'css', 'js'];
+arr.forEach(function(item, index, arr) {
+	console.log(item, index, arr);
+	// html 0 ['html', 'css', 'js']
+	// css 1 ['html', 'css', 'js']
+	// js 2 ['html', 'css', 'js']
+})
+// 第二个参数用来绑定回调函数的this
+let arr1 = ['jsx', 'ljj', 'ddc'];
+arr.forEach(function(item, index, arr) {
+	console.log(this[index]); // jsx ljj ddc
+}, arr1)
+
+ // forEach() 没有返回值返回值为undefined
+let arr2 = arr.forEach(function (item, index, arr) {
+    return this[index]
+}, arr1)
+console.log(arr2)
+```
+
 
 
 ### 7-2 `map()`
+
+`let newArr = arr.map(callback(item, index, array){}, thisArg)`
+
+`map` 方法会给原数组中的每个元素都按顺序调用一次  `callback` 函数，可以链式调用
+
+`callback` 每次执行后的返回值（包括 `undefined`）组合起来形成一个新数组
+
+该方法不会对空数组进行检测，它会返回一个新数组，**不会改变原始数组**
+
+还可以有第二个参数，用来绑定回调函数内部 `this` 变量
+
+* 如果 `thisArg` 参数有值，则每次 `callback` 函数被调用时，`this` 都会指向 `thisArg` 参数
+* 如果省略了 `thisArg` 参数，或者其值为 `null` 或 `undefined`，`this` 则指向全局对象
+
+```js
+let arr = ['html', 'css', 'js'];
+let arr1 = arr.map(function(item, index, arr) {
+	return item;
+})
+// 返回新数组
+console.log(arr1); // ['html', 'css', 'js'];
+
+let arr3 = ['a', undefined, '']
+let arr2 = arr.map(function(item, index, arr) {
+	return this[index];
+}, arr3)
+console.log(arr2); // ['a', undefined, '']
+```
 
 
 
 ### 7-3 `every()`
 
+`arr.every(callback(element, index, array){}, thisArg)`
+
+会对数组中的每一项进行遍历，只有所有元素都符合条件时，才返回 `true`，否则就返回 `false`，`every` 不会改变原数组
+
+如果为 `every` 提供一个 `thisArg` 参数，则该参数为调用 `callback` 时的 `this` 值。如果省略该参数，则 `callback` 被调用时的 `this` 值，在非严格模式下为全局对象
+
+```js
+let arr = [1, 2, 49, 5];
+let result = arr.every(function(item, index, arr) {
+	console.table(item, index, arr)
+	return item > 0;
+})
+console.log(result); // true
+```
+
 
 
 ### 7-4 `some()`
+
+`arr.some(callback(element, index, array){}, thisArg)`
+
+方法会对数组中的每一项进行遍历，只要有一个元素符合条件，就返回 `true`，否则就返回 `false`，`some()` 被调用时不会改变数组
+
+如果为 `every` 提供一个 `thisArg` 参数，则该参数为调用 `callback` 时的 `this` 值。如果省略该参数，则 `callback` 被调用时的 `this` 值，在非严格模式下为全局对象
+
+```js
+let arr = [1, 2, 49, -5];
+let result = arr.some(function(item, index, arr) {
+	console.table(item, index, arr)
+	return item < 0;
+})
+console.log(result); // true
+```
 
 
 
 ### 7-5 `reduce()`
 
+`let value = arr.reduce(function(accumulator, current, index, array) {// ... }, initial);`
+
+对数组中的每个元素执行一个 `reducer` 函数(升序执行)，将其结果汇总为单个返回值
+
+如果调用`reduce()`时提供了`initial`，`accumulator`取值为`initial`，`current`取数组中的第一个值
+
+如果没有提供 `initial`，那么`accumulator`取数组中的第一个值，`current`取数组中的第二个值
+
+该方法如果添加初始值，就会改变原数组，将这个初始值放在数组的最后一位
+
+* `accumulator`：是上一个函数调用的结果，第一次等于 `initial`（如果提供了 `initial` ）
+* `current`：当数组元素
+* `index`：当前索引
+* `arr`：数组本身
+* `initial`：作为第一次调用 `callback` 函数时的第一个参数的值（初始值）如果没有提供初始值，则将使用数组中的第一个元素
+
+```js
+let arr = [1, 2, 3, 4, 5];
+// 没有提供initial,数组从第二个元素开始执行回调
+let result = arr.reduce(function(prev, item, index, array) {
+	console.log(prev, item, index);
+	return prev + item;
+});
+console.log(result); // 15
+
+1 2 1
+3 3 2
+6 4 3
+10 5 4
+[1, 2, 3, 4, 5] 15
+
+
+// 提供initial,数组从第一个元素开始执行回调
+let result1 = arr.reduce(function(prev, item, index, array) {
+	console.log(prev, item, index);
+	return prev + item;
+}, 3);
+console.log(result1); // 18
+```
+
 
 
 ### 7-6 `reduceRight()`
 
+`let value = arr.reduceRight(function(accumulator, current, index, array) {...}, initial)`
+
+该方法和的上面的`reduce()`用法几乎一致，只是该方法是对数组进行倒序查找的。而`reduce()`方法是正序执行的
+
+```js
+let arr = [1, 2, 3, 4, 5];
+// 没有提供initial,数组从第二个元素开始执行回调
+let result = arr.reduceRight(function(prev, item, index, array) {
+	console.log(prev, item, index);
+	return prev + item;
+});
+console.log(result); // 15
+
+5 4 3
+9 3 2
+12 2 1
+14 1 0
+15
+```
 
 
-## 8. 静态方法
 
-### 8-1 `Array.from()`
+## 8. 数组判断
 
+### 8-1 `Array.isArray()`
 
+`Array.isArray(value)`
 
-### 8-2 `Array.isArray()`
+确定传递的值是否是一个 `Array`，如果 `value` 是一个数组，则返回 `true`；否则返回 `false`
 
+```js
+let arr = ['html', 'css'];
+console.log(Array.isArray(arr)); // true
 
+let str = 'jsx';
+console.log(Array.isArray(str)); // false
 
-### 8-3 `Array.of()`
-
+let obj = {
+	name: 'jsx',
+	age: 22
+}
+console.log(Array.isArray(obj)); // false
+```
