@@ -674,7 +674,7 @@ console.log(result); // 15
 
 
 
-## 8. 数组判断
+## 8. 静态方法
 
 ### 8-1 `Array.isArray()`
 
@@ -695,3 +695,27 @@ let obj = {
 }
 console.log(Array.isArray(obj)); // false
 ```
+
+
+
+### 8-2 `Array.of()`
+
+`Array.of(element0, element1, ..., elementN)`
+
+`Array.of` 用于**将参数依次转化为数组项**，然后返回这个新数组
+
+当有 2 个参数时，返回的结果是一致的
+
+当只有 1 个参数时，`Array.of` 会把参数变成数组里的一项，而构造器 `Array` 则会生成长度和第一个参数相同的空数组
+
+```js
+Array.of(8.0); // [8]
+Array(8.0); // [empty × 8]
+
+Array.of(8.0, 5); // [8, 5]
+Array(8.0, 5); // [8, 5]
+
+Array.of('8'); // ["8"]
+Array('8'); // ["8"]
+```
+
