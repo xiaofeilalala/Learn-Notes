@@ -284,6 +284,8 @@ console.log(myFunction(-1, ...args, 2, ...[3]));
 
  `arguments` 是一个类数组，也是可迭代对象，但它不是数组，它不支持数组方法
 
+* 可以返回参数的数量 `arguments.length`
+
 ```js
 function fn(a, ...b) {
 	let result = 0;
@@ -327,7 +329,9 @@ console.log(fn1(1, 2, 3));
 函数主体被视为一个表达式，并且该表达式被分配给一个变量。使用这种语法定义的函数可以是命名函数或匿名函数
 
 ```js
-let fn = function () {};
+let fn  = function([形参1, 形参2, ...形参N]){
+	语句....
+}
 ```
 
 
@@ -407,17 +411,40 @@ console.log(res2); // res2 is not defined
 
 ## 7. 回调函数
 
-被作为实参传入另一函数，并在另一函数内被调用，用以来完成某些任务的函数，称为回调函数
+`javascript` 中函数可以作为参数传递
+
+一个函数被作为参数传递给另一个函数，回调函数在另一个中被调用被称为回调函数
+
+**匿名函数回调**
 
 ```js
-function getName(name) {
-	console.log(name)
+// 匿名回调函数
+function getName(name, callback) {
+	// 函数传递一个name参数，一个callback函数
+	callback(name);
+	// callback参数为name值
 }
 
-function editName(callback) {
-	let result = prompt('你的名字？')
-	callback(result);
-}
-editName(getName);
+// 调用外部定义函数
+getName('jsx', function(name) {
+	// 匿名函数回调,传入参数name 返回name
+	console.log(name); // jsx
+})
+```
+
+
+
+**命名函数回调**
+
+```js
+ // 命名回调函数
+ function getAge(age, callback) {
+ 	callback(age);
+ }
+
+ function showAge(age) {
+ 	console.log(age);
+ }
+ getAge(22, showAge); // 22
 ```
 
