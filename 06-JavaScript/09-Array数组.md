@@ -465,7 +465,7 @@ console.log(obj.length); // 2
 
 类数组对象与数组的区别是**类数组对象不能直接使用数组的方法**
 
-类数组对象是对象不是 `Array`,用 `isArray` 判断会返回 `false`
+类数组对象是对象不是 `Array`，用 `isArray` 判断会返回 `false`
 
 ```js
 // 类数组不能用数组的方法
@@ -573,7 +573,7 @@ Array.from(new Map([[1, 'ab'], [2, 'de']]));   // [[1, 'ab'], [2, 'de']]
 
 
 
-### 7-4 其它转换方法
+### 7-4 类数组转换方法
 
 * `Array.prototype.slice.call()` 能将具有`length`属性的对象转成数组
 *  `Array.from(arguments)` 类数组对象和可遍历（`iterable`）对象转成数组
