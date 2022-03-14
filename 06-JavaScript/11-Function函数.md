@@ -383,17 +383,24 @@ console.log(anonymous('vue')); // vue
 
 ### 5-3 命名函数表达式
 
-可以外部赋值的变量调用该命名函数表达式，命名函数表达式里的名称只是一个标识符，不能调用函数
+命名函数表达式，指带有名字的函数表达式
 
-命名函数表达式里的名称（标识符）只有在函数作用域中有效，在外面的作用域中无效
+* 它允许函数在内部引用自己
+* 它在函数外是不可见的
 
 ```js
-let fn = function fn1(a, b) {
-	console.log(typeof fn1); // function
-	return a + b;
-}
-console.log(typeof fn1); // undefined
-console.log(fn(3, 5)); // 8
+let sayHi = function func(who) {
+  if (who) {
+    alert(`Hello, ${who}`);
+  } else {
+    func("jsx"); // 使用 func 再次调用函数自身
+  }
+};
+
+sayHi(); // Hello jsx
+
+// 但这不工作
+func(); // Error, func is not defined（在函数外不可见）
 ```
 
 
@@ -467,7 +474,7 @@ getName('jsx', function(name) {
 
 ### 7-2 命名回调函数
 
-将命名的函数作为参数传递给其他函数
+命名函数作为参数传递给其他函数
 
 ```js
  // 命名回调函数
