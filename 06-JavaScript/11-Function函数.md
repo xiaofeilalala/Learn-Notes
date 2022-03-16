@@ -319,6 +319,56 @@ console.log(fn(1, 2, 3)); // 6
 
 
 
+### 4-2 `callee` 属性
+
+`arguments.callee `
+
+`callee` 是 `arguments` 对象的一个属性，包含当前正在执行的函数
+
+它可以用于引用该函数的函数体内当前正在执行的函数
+
+```js
+// callee属性
+// 返回正在执行的函数
+function newFn() {
+	console.log('new');
+	console.log(arguments.callee); // newFn()
+}
+newFn();
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220316223720.png)
+
+
+
+### 4-3 `caller` 属性
+
+返回调用指定函数的函数
+
+* 如果一个函数 `f` 是在全局作用域内被调用的,则 `f.caller` 为`null`
+* 如果一个函数是在另外一个函数作用域内被调用的,则`f.caller` 指向调用它的那个函数
+
+该属性的常用形式 `arguments.callee.caller`替代了被废弃的 `arguments.caller`
+
+```js
+// callee属性
+// 返回正在执行的函数
+function newFn() {
+	console.log('new');
+	otherFn();
+	console.log(arguments.callee); // newFn()
+}
+newFn();
+
+function otherFn() {
+	console.log('other');
+	// caller 返回调用指定函数的函数
+	console.log(arguments.callee.caller); // newFn()
+}
+```
+
+
+
 ### 4-2 箭头函数没有 `arguments` 
 
 访问到的 `arguments` 并不属于箭头函数，而是属于箭头函数外部的函数，因此箭头函数没有 `arguments` 属性
@@ -336,6 +386,8 @@ console.log(fn1(1, 2, 3));
 
 
 ## 5. 函数表达式（匿名函数）
+
+### 5-1 创建函数
 
 **函数表达式是在代码执行到达时被创建，并且仅从那一刻起可用**
 
@@ -407,6 +459,8 @@ func(); // Error, func is not defined（在函数外不可见）
 
 ## 6. 立即执行函数
 
+### 6-1 自执行函数 `IIFE`
+
 立即调用函数表达式是在定义时就会立即执行的 `JavaScript` 函数
 
 通过圆括号包裹一个匿名或者命名函数，再通过`()` 创建一个立即执行函数表达式
@@ -436,6 +490,20 @@ let b = (function() {
 })();
 console.log(res2); // res2 is not defined
 ```
+
+
+
+### 6-2 自执行函数参数
+
+如果立即执行函数中需要全局变量，全局变量会被作为一个参数传递给立即执行函数
+
+```js
+(function(j){
+//代码中可以使用j
+})(i)
+```
+
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220317005415.png)
 
 
 
@@ -486,5 +554,69 @@ getName('jsx', function(name) {
  	console.log(age);
  }
  getAge(22, showAge); // 22
+```
+
+
+
+## 8. 构造函数
+
+### 8-1 创建函数
+
+创建一个新的 `Function` 对象。直接调用此构造函数可以动态创建函数
+
+* `functionName`表示函数名称
+* `[arg1[, arg2[, ...argN]],]`表示可选的参数列表
+* `functionBody`表示函数
+
+```js
+var functionName = new Function ([arg1[, arg2[, ...argN]],] functionBody)
+```
+
+- 函数的参数和函数体，都以字符串形式填写在括号中，以逗号分隔
+- 在使用构造函数创建一个 `Function` 类型的对象时，会得到一个函数
+
+```js
+// 无参的函数
+var fun = new Function('console.log("这是一个函数")')
+fun() // 这是一个函数
+// 带一个参数的函数
+var fun = new Function('a', 'console.log("这个函数带一个参数：" + a)')
+fun(100) // 这个函数带一个参数：100
+// 带两个参数的函数
+var fun = new Function(
+  'a, b',
+  'console.log("这是带两个参数的函数，分别是" + a + "和" + b);',
+)
+fun(100, 200) // 这是带两个参数的函数，分别是100和200
+```
+
+
+
+### 8-2 构造函数作用域
+
+由 `Function` 构造函数创建的函数不会创建当前环境的闭包，它们总是被创建于全局环境
+
+只能访问全局变量和自己的局部变量，不能访问它们被 `Function` 构造函数创建时所在的作用域的变量
+
+```js
+var x = 10;
+
+function createFunction1() {
+    var x = 20;
+    return new Function('return x;'); // 这里的 x 指向最上面全局作用域内的 x
+}
+
+function createFunction2() {
+    var x = 20;
+    function f() {
+        return x; // 这里的 x 指向上方本地作用域内的 x
+    }
+    return f;
+}
+
+var f1 = createFunction1();
+console.log(f1());          // 10
+var f2 = createFunction2();
+console.log(f2());          // 20
 ```
 
