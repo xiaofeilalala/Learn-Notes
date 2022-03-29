@@ -35,7 +35,7 @@ let obj = new object();
 
 -   键：相当于属性名
     * 对象的所有键名都是字符串
-    * ES6 又引入了 Symbol 值也可以作为键名
+    * ES6 又引入了 `Symbol` 值也可以作为键名
     * 如果键名是数值，会被自动转为字符串
 -   值：相当于属性值，可以是任意类型的值（数字类型、字符串类型、布尔类型，函数类型等）
 
@@ -145,7 +145,7 @@ console.log('school' in obj); // true
 
 `for...in` 循环有两个使用注意点：
 
-- 它遍历的是对象所有可遍历的属性，会跳过不可遍历的属性
+- 遍历对象里可枚举属性
 - 它不仅遍历对象自身的属性，还遍历继承的属性
 
 ```js
@@ -281,5 +281,84 @@ function fn(user) {
 }
 let obj1 = new fn('jsx');
 console.log(obj1.user); // jsx
+```
+
+
+
+## 3. 引用特性与 this
+
+### 3-1 对象引用特性
+
+对象和函数、数组一样是引用类型，即复制只会复制引用地址
+
+赋值了对象的变量存储的不是对象本身，而是该对象在内存中的地址，也就是对该对象的引用
+
+* 当一个对象变量被复制 —— 引用被复制，而该对象自身并没有被复制
+
+```js
+let obj = {
+	name: 'jsx'
+}
+let obj1 = obj;
+obj1.age = 22;
+console.log(obj); // {name: 'jsx', age: 22}
+console.log(obj1); // {name: 'jsx', age: 22}
+```
+
+* 对象做为函数参数使用时也不会产生完全赋值，内外共用一个对象
+
+```js
+// 对象最为函数参数也不会完全赋值，共用同一对象
+let user = {
+	name: 'jsx'
+}
+
+function getUser(value) {
+	value.name = 'ljj'
+}
+getUser(user);
+console.log(user); // {name: 'ljj'}
+```
+
+
+
+### 3-2 对象中的 this
+
+`this` 指当前对象的引用，作为对象属性的函数被称为方法
+
+* 方法中的 `this` 指向调用该方法的对象
+* 在没有对象的情况下调用 `this` 等于 `window`，严格模式下为 `undefined`
+* 箭头函数没有 `this` ，在箭头函数内部访问到的 `this` 都是从外部获取的
+
+```js
+// 方法中调用 this 指向该对象
+let obj = {
+	name: 'jsx',
+	fn: function() {
+		console.log(this); // {name: 'jsx', fn: ƒ}
+		console.log(this.name) // jsx
+	}
+}
+obj.fn();
+
+// 在没有对象情况下 this 指向window
+// 严格模式下为undefined
+function global() {
+	'use strict'
+	console.log(this); // undefined
+}
+global(); // Window {window: Window, self: Window, document: document, name: '', location: Location, …}
+
+// 对象中的箭头函数通过上下文获取this
+let method = {
+	num: 2,
+	sum: function() {
+		return () => {
+			console.log(this) // {num: 2, sum: ƒ}
+			console.log(this.num); //  2
+		}
+	}
+}
+method.sum()();
 ```
 

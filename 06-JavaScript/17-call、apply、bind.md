@@ -103,7 +103,7 @@ newFn(); // html js
 
 
 
-### 4. call、apply、bind区别
+## 4. call、apply、bind区别
 
 `call`、`apply`、`bind` 区别：
 
@@ -149,9 +149,9 @@ function handle(...params) {
 
 
 
-## 4. 改变 this 指向
+## 5. 改变 this 指向
 
-### 4-1 类型判断
+### 5-1 类型判断
 
 `Object.prototype.toString.call()`
 
@@ -192,7 +192,7 @@ console.log(
 
 
 
-### 4-2 数组获取最大值和最小值
+### 5-2 数组获取最大值和最小值
 
 `apply()` 直接传递数组调用方法的参数，使用`Math.max`、`Math.min`来获取数组的最大值/最小值
 
@@ -204,7 +204,7 @@ console.log(Math.min.apply(Math, arr)) // 0
 
 
 
-### 4-3 伪数组转换
+### 5-3 伪数组转换
 
 ` Array.prototype.slice.call()`
 
@@ -225,7 +225,7 @@ console.log(arr); // ['html', 'css', 'js', 'vue']
 
 
 
-### 4-4 数组元素添加
+### 5-4 数组元素添加
 
 在 `js` 中要往数组中添加元素，可以直接用 `push` 方法
 
@@ -238,7 +238,7 @@ console.log(arr1); // ['jsx', 'ljj', 'ddc', 'zdj']
 
 
 
-### 4-5 构造函数继承
+### 5-5 构造函数继承
 
 通过借用父类的构造方法来实现父类方法/属性的继承
 
@@ -261,7 +261,7 @@ console.log(method2) // fn2 {name: 'jsx', age: 23}
 
 
 
-### 4-6  this赋值给闭包
+### 5-6  this赋值给闭包
 
 当使用匿名函数或者立即执行函数时，`this` 指向的`window` 对象，可以通过在函数内部创建私有变量，形成闭包，使得 `this` 指向函数调用本身
 
