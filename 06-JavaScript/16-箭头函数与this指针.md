@@ -314,7 +314,7 @@ strictFn(); // window
 ### 2-3 普通函数内的 this
 
 * 在函数内部，`this` 的值取决于函数被调用的方式
-* 没有明确调用者时，`this` 指向 `window`
+* 没有明确调用者时也就是立即执行函数，`this` 指向 `window`
 * 在严格模式下，函数体内部的 `this` 为 `undefined`
 
 ```js
@@ -410,7 +410,7 @@ arrowFn.call(obj); // {name: 'jsx'}
 
 ### 2-6 构造函数里的 this
 
-当一个函数用作构造函数时（使用 `new` 关键字），它的 `this` 被绑定到正在构造的新对象
+当一个函数用作构造函数时（使用 `new` 关键字），它的 `this` 指向构造函数创建的实例对象
 
 ```js
 function fn() {

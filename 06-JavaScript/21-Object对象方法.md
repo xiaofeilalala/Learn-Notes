@@ -527,8 +527,8 @@ obj.newName = 'ljj'; // ljj
 
 对于访问器属性，没有 `value` 和 `writable`，但是有 `get` 和 `set` 函数
 
-- `get` —— 获取属性时调用的函数，默认值为 undefined
-- `set` —— 写入属性时调用的函数，默认值为 undefined
+- `get` —— 获取属性时调用的函数，默认值为 `undefined`
+- `set` —— 写入属性时调用的函数，默认值为 `undefined`
 - `enumerable` —— 与数据属性的相同
 - `configurable` —— 与数据属性的相同
 
