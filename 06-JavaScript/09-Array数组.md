@@ -576,5 +576,7 @@ Array.from(new Map([[1, 'ab'], [2, 'de']]));   // [[1, 'ab'], [2, 'de']]
 ### 7-4 类数组转换方法
 
 * `Array.prototype.slice.call()` 能将具有`length`属性的对象转成数组
+* `Array.prototype.splice.call()`
+* `Array.prototype.concat.call()`
 *  `Array.from(arguments)` 类数组对象和可遍历（`iterable`）对象转成数组
 * ES6 中的扩展运算符`...`
