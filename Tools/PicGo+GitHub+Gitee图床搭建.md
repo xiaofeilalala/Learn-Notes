@@ -124,7 +124,7 @@
 * 设置私人令牌描述，选者私人令牌的权限projects（访问你的个人信息、最新动态，查看、创建、更新你的项目）
 * 创建好后会生成一串字符串这就是私人令牌复制它（一定要保存好！）
 
-![image-20210523124950216](C:\Users\阿匪\AppData\Roaming\Typora\typora-user-images\image-20210523124950216.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20210523124947.png)
 
 
 
