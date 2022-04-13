@@ -143,7 +143,7 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 
 ### 3-2 DOM 树
 
-`DOM` 树：将 `HTML` 表示为标签的树形结构
+`DOM` 树：包含了 `HTML` 所有元素，并向网页文档本身提供了全局操作功能
 
 根据文档对象模型，每个 `HTML` 元素都是一个节点对象，嵌套的元素是闭合元素的子元素，元素内的文本也是一个文本节点对象
 
@@ -188,44 +188,39 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 * `document.images`：图片集合
 
 ```html
-<body>
-    <!-- 链接 -->
-    <a href="javascript:;">超链接</a>
+<!-- 链接 -->
+<a href="javascript:;">超链接</a>
+<!-- 锚点 -->
+<a href="#box">锚点</a>
+<a name="box" class="box">锚点</a>
+<!-- img -->
+<img src="https://lf-cdn-tos.bytescm.com/obj/static/xitu_extension/static/gold.981a5510.svg" alt="">
+<!-- form表单 -->
+<form action="">
+    <input type="text" value="form表单">
+</form>
 
-    <!-- 锚点 -->
-    <a href="#box">锚点</a>
-    <a name="box" class="box">锚点</a>
+<script>
+    // document 操作文档起点
+    // document.documentElement html根元素节点
+    console.log(document.documentElement)
 
-    <!-- img -->
-    <img src="https://lf-cdn-tos.bytescm.com/obj/static/xitu_extension/static/gold.981a5510.svg" alt="">
+    // document 还能获取title标签 URL 域名 来源地址
+    console.log(document.title);
+    console.log(document.URL); 
+    // http://127.0.0.1:5500/05-JavaScript/23-DOM/07-%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9.html#box
+    console.log(document.domain); // 127.0.0.1
+    console.log(document.referrer);
+     // http://127.0.0.1:5500/05-JavaScript/23-DOM/07-%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9.html
 
-    <!-- form表单 -->
-    <form action="">
-        <input type="text" value="form表单">
-    </form>
-
-    <script>
-        // document 操作文档起点
-        // document.documentElement html根元素节点
-        console.log(document.documentElement)
-    
-        // document 还能获取title标签 URL 域名 来源地址
-        console.log(document.title);
-        console.log(document.URL); 
-        // http://127.0.0.1:5500/05-JavaScript/23-DOM/07-%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9.html#box
-        console.log(document.domain); // 127.0.0.1
-        console.log(document.referrer);
-         // http://127.0.0.1:5500/05-JavaScript/23-DOM/07-%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9.html
-    
-        // 节点对象需要浏览器渲染了html才能读取
-        console.log(document.body); // body元素节点
-        console.log(document.head); // head元素节点
-        console.log(document.links); // 所有超链接的集合
-        console.log(document.anchors); // 获取所有锚点
-        console.log(document.images); // 获取所有图片
-        console.log(document.forms); // 获取所有图片
-    </script>
-</body>
+    // 节点对象需要浏览器渲染了html才能读取
+    console.log(document.body); // body元素节点
+    console.log(document.head); // head元素节点
+    console.log(document.links); // 所有超链接的集合
+    console.log(document.anchors); // 获取所有锚点
+    console.log(document.images); // 获取所有图片
+    console.log(document.forms); // 获取所有图片
+</script>
 ```
 
 
@@ -242,35 +237,33 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 - 对于注释节点 `elem.nodeType == 8`
 - 对于 `document` 对象 `elem.nodeType == 9`
 
-| nodeType | 说明         |
-| -------- | ------------ |
-| 1        | 元素节点     |
-| 2        | 属性节点     |
-| 3        | 文本节点     |
-| 8        | 注释节点     |
-| 9        | document对象 |
+| nodeType | 说明            |
+| -------- | --------------- |
+| 1        | 元素节点        |
+| 2        | 属性节点        |
+| 3        | 文本节点        |
+| 8        | 注释节点        |
+| 9        | `document` 对象 |
 
 ```html
-<body>
-    <div class="container">hello DOM</div>
-    <!-- hello dom -->
+<div class="container">hello DOM</div>
+<!-- hello dom -->
 
-    <script>
-        let body = document.body
-        let container = document.querySelector('.container')
-        console.log(body.nodeType); // 1 body节点属性
+<script>
+    let body = document.body
+    let container = document.querySelector('.container')
+    console.log(body.nodeType); // 1 body节点属性
 
-        let attr = container.attributes.class;
-        console.log(attr.nodeType); // 2 属性节点
-        
-        console.log(body.firstChild.nodeType); // 3 文本属性
+    let attr = container.attributes.class;
+    console.log(attr.nodeType); // 2 属性节点
+    
+    console.log(body.firstChild.nodeType); // 3 文本属性
 
-        console.log(body.childNodes[3].nodeType); // 8 节点注释节点
+    console.log(body.childNodes[3].nodeType); // 8 节点注释节点
 
-        let doc = document;
-        console.log(document.nodeType); // 9 document对象
-    </script>
-</body>
+    let doc = document;
+    console.log(document.nodeType); // 9 document对象
+</script>
 ```
 
 
@@ -312,21 +305,20 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 * `document` 文档节点、文本节点、属性节点、注释节点值都为 `undefined`
 
 ```html
-<body>
-    <!-- 注释 -->
-    <h3 class="box" id="box">hello dom</h3>
-    <script>
-        let h3 = document.querySelector('.box');
-        let body = document.body;
+<!-- 注释 -->
+<h3 class="box" id="box">hello dom</h3>
 
-        // tagName 获取元素节点的名称 值为大写
-        console.log(document.tagName); // undefined
-        console.log(body.tagName); // BODY
-        console.log(h3.firstChild.tagName); // undefined
-        console.log(body.childNodes[1].tagName); // undefined
-        console.log(h3.attributes.class.tagName); // undefined
-    </script>
-</body>
+<script>
+    let h3 = document.querySelector('.box');
+    let body = document.body;
+
+    // tagName 获取元素节点的名称 值为大写
+    console.log(document.tagName); // undefined
+    console.log(body.tagName); // BODY
+    console.log(h3.firstChild.tagName); // undefined
+    console.log(body.childNodes[1].tagName); // undefined
+    console.log(h3.attributes.class.tagName); // undefined
+</script>
 ```
 
 
@@ -344,19 +336,18 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 | 9        | `null`       |
 
 ```html
-<body>
-    <!-- hello dom -->
-    <div class="box">hello world</div>
-    <script>
-        let body = document.body;
-        let box = document.querySelector('.box')
-        console.log(body.nodeValue); // null
-        console.log(box.firstChild.nodeValue); // hello world
-        console.log(body.childNodes[1].nodeValue); //  hello dom 
-        console.log(box.attributes.class.nodeValue); // box
-        console.log(document.nodeValue); // null
-    </script>
-</body>
+<!-- hello dom -->
+<div class="box">hello world</div>
+
+<script>
+    let body = document.body;
+    let box = document.querySelector('.box')
+    console.log(body.nodeValue); // null
+    console.log(box.firstChild.nodeValue); // hello world
+    console.log(body.childNodes[1].nodeValue); //  hello dom 
+    console.log(box.attributes.class.nodeValue); // box
+    console.log(document.nodeValue); // null
+</script>
 ```
 
 
@@ -364,18 +355,17 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 `data` 属性可以获取文本节点与注释节点的内容，其它节点返回 `undefined`
 
 ```html
-<body>
-    <!-- hello dom -->
-    <div class="box">hello world</div>
-    <script>
-        // data获取文本节点和注释节点
-        console.log(body.data); // null
-        console.log(box.firstChild.data); // hello world
-        console.log(body.childNodes[1].data); //  hello dom 
-        console.log(box.attributes.class.data); // box
-        console.log(document.data); // null
-    </script>
-</body>
+<!-- hello dom -->
+<div class="box">hello world</div>
+
+<script>
+    // data获取文本节点和注释节点
+    console.log(body.data); // null
+    console.log(box.firstChild.data); // hello world
+    console.log(body.childNodes[1].data); //  hello dom 
+    console.log(box.attributes.class.data); // box
+    console.log(document.data); // null
+</script>
 ```
 
 
@@ -384,22 +374,21 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 
 `textContent` 属性会将元素的 `<tags>` 去掉，返回纯文本内容
 
-使用 `textContent`，我们将其作为文本插入，所有符号都按字符串形式处理
+使用 `textContent`，我们将其作为文本插入，标签符号不进行标签解析
 
 ```html
-<body>
-    <div class="box">hello dom</div>
-    <script>
-        let box = document.querySelector('.box');
-        console.log(box.textContent); // hello dom
-        console.log(box); // div节点对象
+<div class="box">hello dom</div>
 
-        // 通过textContent插入内容时，符号会按照字面意思写入
-        box.textContent = '<p>hello jsx</p>';
-        // <p>hello jsx</p>
-        // 此时符号为字符串
-    </script>
-</body>
+<script>
+    let box = document.querySelector('.box');
+    console.log(box.textContent); // hello dom
+    console.log(box); // div节点对象
+
+    // 通过textContent插入内容时，符号会按照字面意思写入
+    box.textContent = '<p>hello jsx</p>';
+    // <p>hello jsx</p>
+    // 此时符号为字符串
+</script>
 ```
 
 
@@ -412,9 +401,8 @@ console.log(EventTarget.__proto__.__proto__.__proto__) // true
 <div style="display: none"></div>
 document.querySelector('div').hidden = true;
 
-<body>
-    <div class="container"></div>
-</body>
+<div class="container"></div>
+
 <script>
     let container = document.querySelector('.container')
     console.log(container.hidden); // false
@@ -438,15 +426,14 @@ document.querySelector('div').hidden = true;
 * `namedItem()`：根据 `Id` 或根据字符串所表示的 `name` 属性来获取元素
 
 ```html
-<body>
-    <ul>
-        <li name="jsx">1</li>
-        <li name="jsx">2</li>
-        <li id="js" name="jsx1">3</li>
-        <li name="jsx">4</li>
-        <li name="jsx">5</li>
-    </ul>
-</body>
+<ul>
+    <li name="jsx">1</li>
+    <li name="jsx">2</li>
+    <li id="js" name="jsx1">3</li>
+    <li name="jsx">4</li>
+    <li name="jsx">5</li>
+</ul>
+
 <script>
     // 元素集合
     // getElementsByName返回的是nodeList及节点集合
@@ -485,32 +472,31 @@ document.querySelector('div').hidden = true;
 * `item()`：返回 `NodeList` 对象中指定索引的节点
 
 ```html
-<body>
-    <ul>
-        <li name="jsx">hello</li>
-        <li name="jsx">2</li>
-        <li name="jsx">3</li>
-        <li name="jsx">4</li>
-        <li name="jsx">5</li>
-    </ul>
-    <script>
-        // 节点集合
-        // Node.childNodes
-        let list = document.querySelector('body').childNodes
-        console.log(list);
-        // NodeList(8) [text, ul, text, comment, text, script, text, script]
+<ul>
+    <li name="jsx">hello</li>
+    <li name="jsx">2</li>
+    <li name="jsx">3</li>
+    <li name="jsx">4</li>
+    <li name="jsx">5</li>
+</ul>
 
-        // querySelectorAll
-        let list1 = document.querySelectorAll('li');
-        console.log(list1); // NodeList(5) [li, li, li, li, li]
+<script>
+    // 节点集合
+    // Node.childNodes
+    let list = document.querySelector('body').childNodes
+    console.log(list);
+    // NodeList(8) [text, ul, text, comment, text, script, text, script]
 
-        // length属性
-        console.log(list1.length); // 5
+    // querySelectorAll
+    let list1 = document.querySelectorAll('li');
+    console.log(list1); // NodeList(5) [li, li, li, li, li]
 
-        // item() 选择节点
-        console.log(list1.item(0)); // <li name="jsx">hello</li>
-    </script>
-</body>
+    // length属性
+    console.log(list1.length); // 5
+
+    // item() 选择节点
+    console.log(list1.item(0)); // <li name="jsx">hello</li>
+</script>
 ```
 
 
@@ -523,47 +509,46 @@ document.querySelector('div').hidden = true;
 * 使用 `querySelectorAll` 返回的是静态的 `static` 集合，文档发生更改时不会自动更新
 
 ```html
-<body>
-    <ul>
-        <li name="jsx">1</li>
-        <li name="jsx">2</li>
-        <li name="jsx">3</li>
-        <li name="jsx">4</li>
-        <li name="jsx">5</li>
-    </ul>
-    <div class="box">
-        <button class="btn live">live 动态</button>
-        <button class="btn static">static 静态</button>
-        <button class="btn liveChangeStatic">将动态集合保存为静态集合</button>
-    </div>
-    <script>
-        // 动态集合 操作数组时会实时更新
-        let live = document.getElementsByTagName('li');
-        let static = document.querySelectorAll('li');
-        // 将动态集合保存静态集合
-        let liveChangeStatic = Array.prototype.slice.call(live);
+<ul>
+    <li name="jsx">1</li>
+    <li name="jsx">2</li>
+    <li name="jsx">3</li>
+    <li name="jsx">4</li>
+    <li name="jsx">5</li>
+</ul>
+<div class="box">
+    <button class="btn live">live 动态</button>
+    <button class="btn static">static 静态</button>
+    <button class="btn liveChangeStatic">将动态集合保存为静态集合</button>
+</div>
+    
+<script>
+    // 动态集合 操作数组时会实时更新
+    let live = document.getElementsByTagName('li');
+    let static = document.querySelectorAll('li');
+    // 将动态集合保存静态集合
+    let liveChangeStatic = Array.prototype.slice.call(live);
+    console.log('live-->', live)
+    console.log('static-->', static)
+    let button1 = document.querySelector('.live');
+    let button2 = document.querySelector('.static');
+    let button3 = document.querySelector('.liveChangeStatic');
+    button1.addEventListener('click', () => {
+        document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
+        console.log('live-->', live.length)
         console.log('live-->', live)
+    })
+    button2.addEventListener('click', () => {
+        document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
+        console.log('static-->', static.length)
         console.log('static-->', static)
-        let button1 = document.querySelector('.live');
-        let button2 = document.querySelector('.static');
-        let button3 = document.querySelector('.liveChangeStatic');
-        button1.addEventListener('click', () => {
-            document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
-            console.log('live-->', live.length)
-            console.log('live-->', live)
-        })
-        button2.addEventListener('click', () => {
-            document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
-            console.log('static-->', static.length)
-            console.log('static-->', static)
-        })
-        button3.addEventListener('click', () => {
-            document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
-            console.log('liveChangeStatic-->', liveChangeStatic.length)
-            console.log('liveChangeStatic-->', liveChangeStatic)
-        })
-    </script>
-</body>
+    })
+    button3.addEventListener('click', () => {
+        document.querySelector('li').insertAdjacentHTML('beforebegin', '<li name="jsx">新元素</li>')
+        console.log('liveChangeStatic-->', liveChangeStatic.length)
+        console.log('liveChangeStatic-->', liveChangeStatic)
+    })
+</script>
 ```
 
 ![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20220412141932.gif)
@@ -591,21 +576,20 @@ document.querySelector('div').hidden = true;
 `document` 是顶级节点， `html `标签的父节点是 `document`
 
 ```html
-<body>
-    <div class="parent">
-        <div class="child">
-            <div class="Sibling"></div>
-            <div class="Sibling"></div>
-        </div>
+<div class="parent">
+    <div class="child">
+        <div class="Sibling"></div>
+        <div class="Sibling"></div>
     </div>
-    <script>
-        // parentNode 返回指定节点在dom树中的父节点
-        let child = document.querySelector('.child');
-        console.log(child.parentNode); // <div class="parent"></div>
-        // document 顶级节点
-        console.log(document.documentElement.parentNode === document); // true
-    </script>
-</body>
+</div>
+
+<script>
+    // parentNode 返回指定节点在dom树中的父节点
+    let child = document.querySelector('.child');
+    console.log(child.parentNode); // <div class="parent"></div>
+    // document 顶级节点
+    console.log(document.documentElement.parentNode === document); // true
+</script>
 ```
 
 实现当前节点的所有父节点集合
@@ -639,27 +623,25 @@ function parentNodes(node) {
 * `childNotes`：返回包含指定节点的子节点的集合，该集合为即时更新的集合（动态集合）
 
 ```html
-<body>
-    <div class="parent">
-        <div class="child">
-            <div class="Sibling1"></div>
-            <div class="Sibling2"></div>
-        </div>
-        <div class="child2"></div>
+<div class="parent">
+    <div class="child">
+        <div class="Sibling1"></div>
+        <div class="Sibling2"></div>
     </div>
-    <script>
-        // 获取子节点
-        // firstChild dom树中第一个节点
-        // lastChild dom树中最后一个子节点
-        // childNodes 返回包含指定节点的所有子节点
-        let parent = document.querySelector('.parent');
-        console.log(parent.firstChild); // text 文本节点
-        console.log(parent.lastChild); // text 文本节点
-        // 返回所有子节点
-        console.log(parent.childNodes); 
-        // NodeList(5) [text, div.child, text, div.child2, text]
-    </script>
-</body>
+    <div class="child2"></div>
+</div>
+<script>
+    // 获取子节点
+    // firstChild dom树中第一个节点
+    // lastChild dom树中最后一个子节点
+    // childNodes 返回包含指定节点的所有子节点
+    let parent = document.querySelector('.parent');
+    console.log(parent.firstChild); // text 文本节点
+    console.log(parent.lastChild); // text 文本节点
+    // 返回所有子节点
+    console.log(parent.childNodes); 
+    // NodeList(5) [text, div.child, text, div.child2, text]
+</script>
 ```
 
 `hasChildNodes()` 方法检测指定节点是否有子节点
@@ -679,26 +661,25 @@ console.log(document.documentElement.hasChildNodes()); // true
 * `prevousSibling`：返回当前节点的前一个兄弟节点,没有则返回 `null`
 
 ```html
-<body>
-    <div class="parent">
-        <div class="child">
-            <div class="Sibling1"></div>
-            <div class="Sibling2"></div>
-        </div>
-        <div class="child2"></div>
+<div class="parent">
+    <div class="child">
+        <div class="Sibling1"></div>
+        <div class="Sibling2"></div>
     </div>
-    <script>
-        // 获取兄弟节点
-        // nextSibling 获取当前节点的下一个兄弟节点
-        let siblings = document.querySelector('.Sibling1');
-        console.log(siblings.nextSibling.nextSibling); 
-        // <div class="Sibling2"></div>
+    <div class="child2"></div>
+</div>
 
-        let child2 = document.querySelector('.child2');
-        console.log(child2.previousSibling.previousSibling); 
-        // <div class="child">
-    </script>
-</body>
+<script>
+    // 获取兄弟节点
+    // nextSibling 获取当前节点的下一个兄弟节点
+    let siblings = document.querySelector('.Sibling1');
+    console.log(siblings.nextSibling.nextSibling); 
+    // <div class="Sibling2"></div>
+
+    let child2 = document.querySelector('.child2');
+    console.log(child2.previousSibling.previousSibling); 
+    // <div class="child">
+</script>
 ```
 
 
@@ -724,50 +705,49 @@ console.log(document.documentElement.hasChildNodes()); // true
 | `nextElementSibling`     | 下一个兄弟元素 |
 
 ```html
-<body>
-    <div class="parent">
-        <div class="child1">
-            <div class="Sibling1"></div>
-            <div class="Sibling2"></div>
-        </div>
-        <div class="child2"></div>
+<div class="parent">
+    <div class="child1">
+        <div class="Sibling1"></div>
+        <div class="Sibling2"></div>
     </div>
-    <script>
-        // 元素节点导航
-        // 只获取元素节点的属性
+    <div class="child2"></div>
+</div>
 
-        // 获取父元素
-        let child1 = document.querySelector('.child1');
-        console.log(child1.parentElement)
-        // <div class="parent"></div>
+<script>
+    // 元素节点导航
+    // 只获取元素节点的属性
 
-        // 获取所有子元素
-        let parent = document.querySelector('.parent');
-        console.log(parent.children)
-        // HTMLCollection(2) [div.child1, div.child2]
+    // 获取父元素
+    let child1 = document.querySelector('.child1');
+    console.log(child1.parentElement)
+    // <div class="parent"></div>
 
-        // 获取子元素的数量
-        console.log(parent.childElementCount); // 2
+    // 获取所有子元素
+    let parent = document.querySelector('.parent');
+    console.log(parent.children)
+    // HTMLCollection(2) [div.child1, div.child2]
 
-        // 第一个子元素
-        console.log(parent.firstElementChild)
-        // <div class="child1"></div>
+    // 获取子元素的数量
+    console.log(parent.childElementCount); // 2
 
-        // 最后一个子元素
-        console.log(parent.lastElementChild)
-        // <div class="child2"></div>
+    // 第一个子元素
+    console.log(parent.firstElementChild)
+    // <div class="child1"></div>
+
+    // 最后一个子元素
+    console.log(parent.lastElementChild)
+    // <div class="child2"></div>
 
 
-        // 获取上一个兄弟元素
-        let Sibling2 = document.querySelector('.Sibling2')
-        console.log(Sibling2.previousElementSibling)
-        // <div class="Sibling1"></div>
+    // 获取上一个兄弟元素
+    let Sibling2 = document.querySelector('.Sibling2')
+    console.log(Sibling2.previousElementSibling)
+    // <div class="Sibling1"></div>
 
-        // 获取下一个兄弟元素
-        console.log(child1.nextElementSibling)
-        // <div class="child2"></div>
-    </script>
-</body>
+    // 获取下一个兄弟元素
+    console.log(child1.nextElementSibling)
+    // <div class="child2"></div>
+</script>
 ```
 
 
@@ -781,21 +761,20 @@ console.log(document.documentElement.hasChildNodes()); // true
 `Nodelist` 与 `HTMLCollection` 是类数组的可迭代对象所以可以使用 `for...of`进行遍历
 
 ```html
-<body>
-    <div class="container">
-        <p>hello html</p>
-        <p>hello css</p>
-        <p>hello js</p>
-        <p>hello vue</p>
-    </div>
-    <script>
-        let elem = document.querySelector('.container').children;
-        console.log(elem)
-        for (const item of elem) {
-            console.log(item)
-        }
-    </script>
-</body>
+<div class="container">
+    <p>hello html</p>
+    <p>hello css</p>
+    <p>hello js</p>
+    <p>hello vue</p>
+</div>
+    
+<script>
+    let elem = document.querySelector('.container').children;
+    console.log(elem)
+    for (const item of elem) {
+        console.log(item)
+    }
+</script>
 ```
 
 
