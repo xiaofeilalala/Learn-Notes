@@ -426,7 +426,7 @@ console.log(method.name); // jsx
 ### 2-7 DOM事件中的 this
 
 - 事件中 `this `指向事件源对象，`currentTarget`指的是绑定事件的 `DOM` 对象，`target`指的是触发事件的对象
-- `DOM` 事件回调里面 `this` 总是指向`currentTarget`，如果触发事件的对象刚好是绑定事件的对象，即 `target === currentTarget`，this也会顺便指向 `target`
+- `DOM` 事件回调里面 `this` 总是指向`currentTarget`，如果触发事件的对象刚好是绑定事件的对象，即 `target === currentTarget`，`this` 也会顺便指向 `target`
 
 ```js
 function fn(e) {

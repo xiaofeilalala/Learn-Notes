@@ -333,18 +333,15 @@ window.onblur = () => window.focus();
 `window.location.search` 获取参数信息
 
 ```html
-<form action="https://www.w3school.com.cn/demo/demo_form.asp" method="get">
-    <input type="text" name="username" value="jsx">
-    <input type="password" name="password" value="123456">
-    <button type="submit">提交</button>
+<form method="get">
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <input type="submit" value="提交">
 </form>
 <script>
-    // search 设置url
-    window.location.search = 'username=jsx&password=123456'
     // 查询字符串返回对象
     let obj = {};
     let querStr = location.search;
-    console.log(querStr)
     let query = querStr.substring(1).split('&')
     for (let i = 0; i < query.length; i++) {
         let item = query[i].split('=');
