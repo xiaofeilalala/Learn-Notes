@@ -200,6 +200,7 @@ console.log(methods('jsx', 'ljj', ['code', '看剧']));
 
 1. 在函数内部对新对象 `this` 的属性进行设置，通常是添加属性和方法
 2. 构造函数可以包含返回语句（不推荐）
+3. 它们的命名以大写字母开头，它们只能由 `new` 操作符来执行
 
 ```js
 function Methods(name, mygril, message) {
@@ -216,20 +217,7 @@ obj.tellme();
 
 
 
-构造函数的两个条件：
-
-* 它们的命名以大写字母开头
-* 它们只能由 `new` 操作符来执行
-
-```js
-function Fn(name){
-    this.name = name
-}
-let user = new Fn('jsx');
-console.log(user.name) // jsx
-```
-
-
+###  2-3 new 操作符
 
 当一个函数被使用 `new` 操作符执行时，它按照以下步骤：
 
@@ -237,9 +225,26 @@ console.log(user.name) // jsx
 2. 函数体执行。通常它会修改 `this`，为其添加新的属性
 3. 返回 `this` 的值
 
+```js
+function User(name) {
+  // this = {};（隐式创建）
+
+  // 添加属性到 this
+  this.name = name;
+  this.isAdmin = false;
+
+  // return this;（隐式返回）
+}
+
+let user = {
+  name: "Jack",
+  isAdmin: false
+};
+```
 
 
-### 2-3 new.target
+
+### 2-4 new.target
 
 使用 `new.target` 属性来检查它是否被使用 `new` 进行调用了
 
@@ -256,7 +261,7 @@ let obj = new fn('jsx'); // jsx fn(name) {}
 
 
 
-### 2-3 构造函数 return
+### 2-5 构造函数 return
 
 通常，构造器没有 `return` 语句
 
