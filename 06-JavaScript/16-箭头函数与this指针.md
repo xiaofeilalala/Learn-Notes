@@ -292,7 +292,7 @@ console.log(window.name); // jsx
 
 ### 2-2 全局中的 this
 
-* 无论是否在严格模式下，在全局执行环境中（在任何函数体外部）`this` 都指向全局对象
+* 无论是否在严格模式下，在全局执行环境中（在任何函数体外部）`this` 都指向全局对象，函数内部的 `this` 都指向 `undefined`
 
 ```js
 function global() {
@@ -306,7 +306,7 @@ global();
 function strictFn() {
 	console.log(this);
 }
-strictFn(); // window
+strictFn(); // undefined
 ```
 
 
