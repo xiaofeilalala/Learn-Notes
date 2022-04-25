@@ -398,7 +398,7 @@ console.log(obj); // {name: 'jsx'}
 
 ### 5-2 封闭对象
 
-`Object.sealed(obj)`
+`Object.seal(obj)`
 
 禁止添加/删除属性。为所有现有的属性设置 `configurable: false`
 
