@@ -32,6 +32,14 @@
 
 引用 `shiv` 代码的链接必须位于 `<head>` 元素中，因为 `Internet Explorer` 需要在读取之前认识所有新元素
 
+| 浏览器          | 正式版本 | 分数 |
+| --------------- | -------- | ---- |
+| Google Chrome   | 68       | 528  |
+| Opera           | 55       | 528  |
+| Microsoft Edge  | 18       | 496  |
+| Mozilla Firefox | 62       | 497  |
+| Apple Safari    | 11.2     | 477  |
+
 ```html
 <!--[if lt IE 9]>
     <script src="http://cdn.static.runoob.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
@@ -70,16 +78,51 @@ article,aside,dialog,footer,header,section,nav,figure,menu{ display:block }
 
 ### 2-3 新特性
 
-* 新语义化标签的引入
-* 新的表单控件，比如数字、日期、时间、日历和滑块
+`video`、`audio` 和 `canvas` 的加入可以减少浏览器对于插件的需求，而自己实现丰富的网络应用服务，用户可以更容易地在网页中添加和处理多媒体和图片内容
+
+语义化的标签和新属性的添加更丰富了文档的数据内容，有利于搜索引擎的索引整理、小屏幕设备和视障人士使用
+
+`HTMl5` 的存储，更加的安全与快速，这些数据不会被保存在服务器上，这些数据只用于用户请求网站数据上，并且它可以存储大量的数据，而不影响网站的性能
+
+* 新语义化标签的引入，比如 `article`、`footer`、`header`、`nav`、`section` 等
+* 新的表单控件，比如数字、日期、时间、日历和滑块 `date`、`time`、`email`、`url`、`search` 等
 * 多媒体元素引入音频 `audio` 和视频 `video`
 * 绘制图像 `Canvas`、`SVG`
-* 对本地离线存储的更好的支持，本地 `Web SQL` 数据库、`Web Workers`线程、`localStorage`与`sessionStorage `存储、`websocket`通信
+* 对本地离线存储的更好的支持，完全支持 `CSS3`
+* `Web`应用，本地 `Web SQL` 数据库、`Web Workers`线程、`localStorage`与`sessionStorage `存储、`websocket`通信
 * 地理位置定位、拖放`API`
 
 
 
-### 2-4 删除元素
+### 2-4 HTML5模版
+
+> **Tips：**对于中文网页需要使用 `<meta charset="utf-8">` 声明编码，否则会出现乱码
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>文档标题</title>
+  </head>
+
+  <body>
+    文档内容......
+  </body>
+</html>
+```
+
+* `<!DOCTYPE html>` 声明为 `HTML5` 文档，告诉浏览器正确的 `HTML` 版本，有助于正确显示网页内容（不区分大小写）
+* `<html>` `HTML` 页面的根元素
+* `<head>` 是页面的头部元素，这些内容包括你想在搜索结果中出现的关键字和页面描述，CSS 样式，字符集声明等等
+
+- `<meta charset="utf-8">` 定义网页编码格式为 `utf-8`
+- `<title>` 元素描述了文档的标题，出现在浏览器标签上
+- `<body>` 元素包含了可见的页面内容
+
+
+
+### 2-5 删除元素
 
 以下 HTML 4.01 元素已从 HTML5 中删除
 
