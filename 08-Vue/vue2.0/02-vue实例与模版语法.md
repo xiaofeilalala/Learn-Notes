@@ -35,7 +35,7 @@ const vm = new Vue({
   <button type="button" @click="changeValue">修改内容</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let obj = {
@@ -70,7 +70,13 @@ const vm = new Vue({
 
 
 
-### 1-3 vue实例属性
+
+
+### 1-3 el与data选项
+
+
+
+### 1-4 vue实例属性
 
 `Vue` 实例还暴露了一些有用的实例属性与方法。它们都有前缀 `$`，以便与开发者定义的属性区分开来
 
@@ -91,7 +97,7 @@ const vm = new Vue({
 ```html
 <div id="app"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   // 通过Vue函数实例化对象
@@ -128,7 +134,7 @@ const vm = new Vue({
 
 
 
-### 1-4 定义多个实例
+### 1-5 定义多个实例
 
 实例化多个对象与实例化单个 `Vue` 对象方法一样，只是绑定操控的 `el` 元素不一样
 
@@ -146,7 +152,7 @@ const vm = new Vue({
   <button type="button" @click="changeVue1Value()">修改vue1内容</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   // 通过Vue函数实例化对象
@@ -190,7 +196,8 @@ const vm = new Vue({
   <h1>{{title}}</h1>
   <button type="button" @click="changeHeadTitle()">更新数据</button>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({
@@ -466,7 +473,7 @@ mounted:() => {
   <button type="button" @click="changeHeadTitle()">更新数据</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({
@@ -502,7 +509,7 @@ mounted:() => {
   <h3>{{htmlValue}}</h3>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({
@@ -533,7 +540,7 @@ mounted:() => {
   <div v-bind:hidden="bool">v-bind布尔类型</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({
@@ -564,7 +571,7 @@ mounted:() => {
   <h3>{{arr.join(' ')}}</h3>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({
@@ -603,7 +610,9 @@ mounted:() => {
   <a v-bind:href="url">百度</a>
   <button type="button" v-on:click="toBaidu">百度</button>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+<script src="../vue.js"></script>
+
 <script>
   let vm = new Vue({
     el: '#app',
@@ -640,7 +649,9 @@ mounted:() => {
   <!-- 动态参数值预期为字符串不能为null null则表示移除属性 -->
   <img v-bind:[srcAttr]="imgUrl" alt="gril">
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+<script src="../vue.js"></script>
+
 <script>
   let vm = new Vue({
     el: '#app',
@@ -669,7 +680,7 @@ mounted:() => {
   <a href="http://www.baidu.com" @click.prevent="stopTo">禁止跳转</a>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="../vue.js"></script>
 
 <script>
   let vm = new Vue({

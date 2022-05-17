@@ -164,10 +164,10 @@
 
 ```html
 <!-- 开发版本 -->
-<script src="./config/vue.js"></script>
+<script src="../vue.js"></script>
 
 <!-- 生产版本 -->
-<script src="./config/vue.min.js"></script>
+<script src="../vue.min.js"></script>
 ```
 
 
