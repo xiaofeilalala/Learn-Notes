@@ -492,20 +492,622 @@ const vm = new Vue({
 
 ## 2. 自定义事件
 
+> **Tips：**`$emit`、`$on`、`$off`、`$once` 实例方法事件中回调函数中 `this` 都是指向调用事件方法的实例
+
 ### 2-1 事件名
 
+自定义事件的事件名与 `prop` 不同，事件名不会自动化大小写转换，触发的事件名必须完全匹配监听这这个事件的名称
+
+如果触发一个 `camelCase` 名字的事件，则监听这个名字的 `kebab-case` 形式是不会有任何效果的
+
+`v-on` 事件监听器在 DOM 模板中会被自动转换为全小写，所以 `v-on:myEvent` 将会变成 `v-on:myevent`——导致 `myEvent` 不可能被监听到
+
+```html
+<h3>{{message}}</h3>
+<component-a v-on:get-component="changValue"></component-a>
+```
+
+```js
+let componentA = {
+  template: '<button @click="sendMessage">修改父组件数据</button>',
+  data() {
+    return {
+      value: 'Hello JSX'
+    }
+  },
+  methods: {
+    sendMessage() {
+      // $emit触发事件名始推荐终使用 kebab-case 的事件名
+      this.$emit('get-component', this.value)
+      // $emit 为驼峰式 v-on 则无法绑定
+    }
+  },
+  props: ['getComponent']
+}
+```
 
 
-### 2-2 自定义组件model
+
+### 2-2 $emit
+
+`vm.$emit(eventName, ...args)`
+
+`$emit` —— 触发当前实例上的事件，附加参数都会传给监听器回调函数
+
+`$emit` 传入的参数可以通过 `$event` 访问，也可以通过事件处理方法中访问，方法中的参数则是 `$emit` 传入的参数
+
+* 通过父组件给子组件传递函数类型的 `prop` ，实现子组件传递数据给父组件
+
+* 通过 `v-on` 监听子组件实例的任意事件，同时子组件可以通过调用内建的 `$emit` 方法并传入事件名称来触发一个事件，实现子组件传递数据给父组件
+
+* 通过在子组件上定义 `ref` 获取当前组件实例，同时通过 `$on` 监听当前实例上的自定义事件，实现子组件传递数据给父组件
+
+> 当自定义事件传递多个参数时可以包装成对象再传递，自定义事件也可以一个一个传递参数，父组件可以通过 `...rest` 剩余参数形式来获取多个传递的参数 
+
+```html
+<div id="app">
+  <h3>{{message}}</h3>
+  <component-a :prop-value="changeMessage" @emit-value="changeMessage" @ref-value="changeMessage" ref="refComponent"></component-a>
+</div>
+
+<template id="box">
+  <div>
+    <button @click="propEvent">prop修改</button>
+    <button @click="emitEvent">$emit修改</button>
+    <button @click="refEvent">ref修改</button>
+  </div>
+</template>
+```
+
+```js
+let componentA = {
+  template: '#box',
+  props: ['propValue'],
+  methods: {
+    // 1. 通过传递一个函数类型prop来实现子传递父
+    propEvent() {
+      this.propValue(this.prop)
+    },
+    // 2. 通过v-on与$emit实现子传递父
+    emitEvent() {
+      // 传递多个参数时可包装为对象
+      this.$emit('emit-value', this.emit, 'jsx', 'ljj')
+    },
+    // 3. 通过ref与$on实现子传递父
+    refEvent() {
+      // 监听组件上的ref-value自定义事件触发来传递数据
+      this.$emit('ref-value', this.ref, 'html', 'vue')
+    }
+  },
+  data() {
+    return {
+      prop: 'Hello Prop',
+      emit: 'Hello Emit',
+      ref: 'Hello Ref'
+    }
+  }
+}
+
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      message: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    // 自定义事件传递对个参数时可以使用剩余参数
+    changeMessage(val, ...args) {
+      console.log(args)
+      this.message = val
+    }
+  },
+  mounted() {
+    this.$refs.refComponent.$on('ref-value', this.changeMessage)
+    // $on 监听实例上的自定义事件
+    // vm.$on 监听Vue实例
+    // this.$refs.refComponent 监听ref所定义组件实例
+  },
+})
+```
 
 
 
-### 2-3 .native修饰符
+### 2-3 $on
+
+`vm.$on(event, callback)`
+
+`$on` —— 监听当前实例上的自定义事件，`$emit` 触发自定义事件，回调函数会接收所有传入事件触发函数的额外参数
+
+```html
+<div id="app">
+  <h3>{{title}}</h3>
+  <component-a @component-event="getTitle" ref="component"></component-a>
+</div>
+
+<template id="box">
+  <div class="box">
+    <button type="button" @click="changeTitle">$on</button>
+  </div>
+</template>
+```
+
+```js
+// $on用于监听当前实例上的自定义事件
+let componentA = {
+  template: '#box',
+  methods: {
+    changeTitle() {
+      this.$emit('component-event', 'Hello JSX')
+    }
+  }
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    getTitle(val) {
+      console.log(val)
+      this.title = val
+    }
+  },
+  mounted() {
+    this.$refs.component.$on('component-event', this.getTitle)
+  },
+})
+```
 
 
 
-### 2-4 组件事件监听器$listeners
+### 2-4 $off与$destroy
+
+`vm.$off(event, callback)`
 
 
 
-### 2-5 .sync修饰符
+`$off` —— 移除自定义事件监听器
+
+* 如果没有提供参数，则移除所有的事件监听器
+* 如果只提供了事件，则移除该事件所有的监听器
+* 如果同时提供了事件与回调，则只移除这个回调的监听器
+
+`$destory` —— 完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器
+
+* 触发 `beforeDestroy` 和 `destroyed` 的钩子
+
+
+
+组件解除事件绑定的两种方式：
+
+1. 通过 `$off`
+
+2. 通过 `$destroy` 声明周期实例方法
+
+```html
+<div id="app">
+  <h3>{{title}}</h3>
+  <h3>{{message}}</h3>
+  <component-a @title-event="getTitle" @message-event="getMessage"></component-a>
+</div>
+
+<template id="box">
+  <div class="box">
+    <button type="button" @click="changeTitle">$on title</button>
+    <button type="button" @click="changeMessage">$on message</button>
+    <button type="button" @click="removeEvent">$off</button>
+  </div>
+</template>
+```
+
+```js
+// 取消自定义事件绑定
+// 1. 通过$off 
+// 2. 通过destory声明周期函数
+
+let componentA = {
+  template: '#box',
+  mounted() {
+    // 移除这个监听器
+    this.$on('message-event', this.callback)
+  },
+  methods: {
+    changeTitle() {
+      this.$emit('title-event', 'Hello JSX')
+    },
+    changeMessage() {
+      this.$emit('message-event', 'Hello World')
+    },
+    removeEvent() {
+      // 只提供自定义事件，则移除该自定义事件的所有监听器
+      this.$off('message-event')
+      // 数组形式移除多个自定义事件的所有监听器
+      this.$off(['title-event', 'message-event'])
+      // 不传入参数 移除组件所有的事件监听器
+      this.$off();
+      // 提供自定义事件与回调，则只移除回调的监听器
+      this.$off('message-event', this.callback)
+      // 组件声明周期实例来实现移除事件监听器
+      this.$destroy()
+    },
+    callback(val) {
+      console.log(val)
+    }
+  }
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue',
+      message: 'Hello JS'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    getTitle(val) {
+      console.log(val)
+      this.title = val
+    },
+    getMessage(val) {
+      console.log(val)
+      this.message = val
+    }
+  }
+})
+```
+
+
+
+### 2-5 $once
+
+`vm.$once(event, callback)`
+
+`$once` —— 监听当前实例的一个自定义事件，但是只触发一次，一旦触发之后，监听器就会被移除销毁
+
+可以为同一事件绑定多个回调，触发时回调函数按照绑定顺序依次执行
+
+```html
+<div id="app">
+  <h3>{{title}}</h3>
+  <component-a @change-title="getTitle"></component-a>
+</div>
+
+<template id="box">
+  <div>
+    <button @click="onceEvent">$once title</button>
+  </div>
+</template>
+```
+
+```js
+// $once 监听一个自定义事件 只触发一次 触发后监听器移除
+let componentA = {
+  template: "#box",
+  data() {
+    return {
+      value: 'Hello World'
+    }
+  },
+  methods: {
+    onceEvent() {
+      this.$emit('change-title', 'Hello JSX')
+    }
+  },
+  mounted() {
+    // 只监听一次chang-title自定义事件
+    this.$once('change-title', (val) => {
+      console.log(val)
+    })
+  },
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    getTitle(val) {
+      this.title = val
+      console.log(val)
+    }
+  }
+})
+```
+
+
+
+### 2-6 自定义组件model
+
+组件上的 `v-model` 会默认使用名为 `value` 的 `prop` 和为 `input` 的事件
+
+```html
+<component-a v-model="title"></component-a>
+<!-- 组件上使用v-model相当于 -->
+<component-a v-on:input="title = $event.target.value" v-bind:value="title"></component-a>
+
+<!-- 子组件模版接受默认value prop -->
+<!-- 子组件通过 $emit 派发默认 input 事件 -->
+<template id="box">
+  <input type="text" :value="value" @input="changInput" >
+</template>
+```
+
+```js
+let componentA = {
+  template: '#box',
+  props: ['value'],
+  methods: {
+    changInput(e) {
+      this.$emit('input', e.target.value)
+    }
+  }
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  }
+})
+```
+
+
+
+`model` 选项允许一个自定义组件在使用 `v-model` 时定制 `prop` 和 `event`
+
+单选框和复选框按钮可能想使用 `value` `prop` 来达到不同的目的。使用 `model` 选项可以回避这些情况产生的冲突
+
+> 在 `model` 选项中声明 `prop` 后，仍然需要在组件的 `props` 选项里声明 `prop`
+
+```html
+<component-b v-model="message"></component-b>
+<!-- 当组件为单选框、复选框等类型的输入控件value用于不同目的 -->
+
+<template id="pannel">
+  <div>
+    <h3>{{checked}}</h3>
+    <input type="checkbox" :checked="checked" @change="changeCheckbox" true-value="Hello Vue" false-value="Hello React">
+  </div>
+</template>
+```
+
+```js
+let componentB = {
+  template: '#pannel',
+  // 通过model改变组件v-mdoel默认prop与事件
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: ['checked'],
+  methods: {
+    changeCheckbox(e) {
+      this.$emit('change', e.target.checked)
+    }
+  }
+}
+
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      message: true
+    }
+  },
+  components: {
+    componentB
+  }
+})
+```
+
+
+
+### 2-7 .native修饰符
+
+在组件上通过 `v-on` 绑定的事件都是自定义事件，当想要在组件的根元素上直接监听一个元素事件时，可以使用 `.native` 修饰符
+
+```html
+<h3>{{title}}</h3>
+<!-- 直接在组件上使用v-on都会被认为自定义事件 -->
+<component-a @click="changeTitle"></component-a>
+<!-- 当想直接在组件根元素绑定原生事件时可以使用.navtive修饰符 -->
+<component-a @click.native="changeTitle"></component-a>
+
+<template id="box">
+  <div @click="sendTitle" style="margin: 10px 0; width: 100px; height: 100px; background-color: #7852f3;"></div>
+</template>
+```
+
+```js
+let componentA = {
+  template: '#box',
+  methods: {
+    sendTitle() {
+      this.$emit('click', 'Hello JSX')
+    }
+  }
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    changeTitle(val) {
+      this.title = val
+      console.log(val)
+      // 1. 未设置.native修饰符 此时点击事件为自定义事件 val为回调的参数
+      // 2. 设置.native修饰符 此时组件根元素绑定元素事件触发 val 为事件对象event
+    }
+  }
+})
+```
+
+
+
+### 2-8 $listeners
+
+`$listeners` 包含父作用域中不含 `.navtive` 修饰符的 `v-on` 事件监听器
+
+可以通过 `v-on="$listeners"` 传入内部组件，将所有的事件监听器指向这个组件的某个特定的子元素
+
+```html
+<div id="app">
+  <h3>{{title}}</h3>
+  <component-a @change-title="getTitle"></component-a>
+</div>
+
+<template id="box">
+  <div>
+    <div>
+      <h3>组件A</h3>
+      <button @click="componentAEvent">component-A</button>
+    </div>
+    <!-- $listeners 传递到内部嵌套组件 -->
+    <component-b v-on="$listeners"></component-b>
+  </div>
+</template>
+
+<template id="pannel">
+  <div>
+    <h3>组件B</h3>
+    <button @click="componentBEvent">component-b</button>
+  </div>
+</template>
+```
+
+```js
+let componentB = {
+  template: '#pannel',
+  methods: {
+    componentBEvent() {
+      // 孙组件也能接受到事件监听器
+      console.log(this.$listeners)
+      this.$emit('change-title', 'Love')
+    }
+  }
+}
+
+let componentA = {
+  template: '#box',
+  components: {
+    componentB
+  },
+  methods: {
+    componentAEvent() {
+      // 子组件也能接受到事件监听器
+      this.$emit('change-title', 'Me')
+    }
+  }
+}
+
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      title: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    getTitle(val) {
+      this.title = val
+    }
+  }
+})
+```
+
+
+
+### 2-9 .sync修饰符
+
+子组件不能直接修改父组件传递过来的 `prop`，一般情况下，想要实现父子组件间值的传递，通常使用的是外部数据 `props` 和自定义事件 `$emit`
+
+父组件通过 `props` 将值传给子组件，子组件再通过 `$emit` 将值传给父组件，父组件通过事件监听获取子组件传过来的值。`.sync` 修饰符可将以上过程简化，实际上就是一个语法糖
+
+可以通过 `update:myPropName` 的模式触发事件，`update` 是 `vue` 规定的语法书写格式 `myPropName` 是被绑定事件的属性，`.sync` 可以简化属性绑定与事件绑定操作 `v-bind:myPropName.sync` 即可实现
+
+* `.sync` 修饰符 —— 可实现子组件与父组件的双向绑定，且可实现子组件同步修改父组件的值
+* `$event` 可以获取 `$emit` 的参数
+
+> 注意带有 `.sync` 修饰符的 `v-bind` 不能和表达式一起使用
+
+```html
+<label for="">父组件</label>
+<input type="text" v-model="message">
+<!-- <component-a :message="message" v-on:update:message="message = $event"></component-a> -->
+<!-- 父组件则通过$event 来接收经过子组件修改后的值 -->
+<!-- v-on:update:message update是vue规定的语法书写格式 message是被绑定事件的属性-->
+<component-a :message.sync="message"></component-a>
+
+<template id="box">
+  <div>
+    <label for="">{{message}}</label>
+    <button @click="changMessage">$emit title</button>
+  </div>
+</template>
+```
+
+```js
+let componentA = {
+  template: '#box',
+  props: ['message'],
+  methods: {
+    changMessage() {
+      this.$emit('update:message', 'Hello JSX')
+      // 在子组件使用$emit('update:money', money-100) 来通知父组件去响应
+    }
+  },
+  computed: {
+    getValue() {
+      return this.message
+    }
+  }
+}
+const vm = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      message: 'Hello Vue'
+    }
+  },
+  components: {
+    componentA
+  },
+  methods: {
+    getMessage($event) {
+      console.log($event)
+      this.message = $event
+    }
+  }
+})
+```
+
