@@ -10,7 +10,7 @@
 
 
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601211532250.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601211532250.png)
 
 
 
@@ -73,11 +73,11 @@ node -v
 npm -v
 ```
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601212926573.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601212926573.png)
 
 
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601213027789.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601213027789.png)
 
 
 
@@ -90,7 +90,7 @@ npm -v
 * 全局模块文件夹 `node_global` 用于全局安装包的存放
 * 缓存文件夹 `node_cache` 用于缓存文件的存放
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601213309032.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601213309032.png)
 
 
 
@@ -106,7 +106,7 @@ prefix=D:\nodejs\node_global
 cache=D:\nodejs\node_cache
 ```
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601214638195.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601214638195.png)
 
 
 
@@ -117,7 +117,7 @@ npm config set prefix "D:\nodejs\node_global"
 npm config set cache "D:\nodejs\node_cache"
 ```
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601213440616.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601213440616.png)
 
 
 
@@ -127,19 +127,19 @@ npm config set cache "D:\nodejs\node_cache"
 
 1. 右键桌面上我的电脑，打开属性设置 -> 高级系统设置 -> 环境变量
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601214800772.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601214800772.png)
 
 
 
 2. 配置系统变量，在系统变量下新建，变量名：`NODE_PATH` 变量值: `D:\nodejs\node_global\node_modules` (`node_global` 文件夹下的 `node_modules` 文件夹)
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601215154674.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601215154674.png)
 
 
 
 3. 配置用户变量中 `Path`  变量，将 `npm` 默认 `C盘` 的路径 `C:\Users\用户名\AppData\Roaming\npm` 修改为  `D:\nodejs\node_global\node_modules` (`node_global` 文件夹下的 `node_modules` 文件夹)
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601215625635.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601215625635.png)
 
 
 
@@ -166,7 +166,7 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601220541266.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601220541266.png)
 
 
 
@@ -178,7 +178,7 @@ npm config set registry https://registry.npmjs.org/
 
 
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220601220614269.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601220614269.png)
 
 
 
@@ -199,10 +199,10 @@ cnpm -v
 
 
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220605235411307.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220605235411307.png)
 
 1. 找到报错路径 `path` 文件夹
 2. 右键点击文件夹属性，安全配置权限设置
 3. 将组或用户名下的 `4` 个用户权限控制全部勾上即可
 
-![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main//imgs/image-20220606000936542.png)
+![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220606000936542.png)
