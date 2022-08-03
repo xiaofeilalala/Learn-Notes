@@ -73,7 +73,7 @@ Vue.config.optionMergeStrategies._my_option = function (parent, child, vm) {
 
 插件通常用来为 `Vue` 添加全局功能。插件的功能范围没有严格的限制:
 
-1. 添加全局方法或者 `property`属性
+1. 添加全局方法或者 `property` 属性
 2. 添加全局资源：指令/过滤器/过渡等
 3. 通过全局混入来添加一些组件选项
 4. 添加 Vue 实例方法，通过把它们添加到 `Vue.prototype` 上实现
