@@ -6,6 +6,8 @@
 
 ![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/20210522213331.png)
 
+
+
 **PicGo: 一个用于快速上传图片并获取图片 URL 链接的工具**
 
 
@@ -144,3 +146,35 @@
 
 
 
+## 4. gitee插件更新
+
+### 4-1 gitee插件
+
+由于版本的更新，原先的 `gitee2.0.5` 已经不维护了，导致了原先配置的 `gitee` 仓库无法上传图片
+
+> **Tips：**`gitee2.0.5` 插件无法使用
+
+`picgo` 图床为了兼容 `gitee` 上传，发布了新的插件 `gitee-uploader`，该插件可以完成图片上传
+
+* 卸载原先的 `gitee2.0.5` 插件
+* 安装 `gitee-uploader` 插件
+* 重启 `picgo` 图床
+
+
+
+![](https://gitee.com/xiaofeia/docs-pics/raw/master/imgs/202208151716758.png)
+
+
+
+### 4-2 插件配置
+
+在 `PicGo上` 对 `Gitee` 图床重新进行设置
+
+* `repo` —— 仓库的地址（`gitee` 用户名/仓库名）
+* `branch` —— 上传仓库的分支（默认 `master` 分支）
+* `token` —— 私人令牌
+* `path` —— 图片存放在仓库的目录文件夹名称
+
+
+
+![](https://gitee.com/xiaofeia/docs-pics/raw/master/imgs/202208151721499.png)

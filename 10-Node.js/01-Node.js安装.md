@@ -137,7 +137,7 @@ npm config set cache "D:\nodejs\node_cache"
 
 
 
-3. 配置用户变量中 `Path`  变量，将 `npm` 默认 `C盘` 的路径 `C:\Users\用户名\AppData\Roaming\npm` 修改为  `D:\nodejs\node_global\node_modules` (`node_global` 文件夹下的 `node_modules` 文件夹)
+3. 配置用户变量中 `Path`  变量，将 `npm` 默认 `C盘` 的路径 `C:\Users\用户名\AppData\Roaming\npm` 修改为  `D:\nodejs\node_global` 
 
 ![](https://raw.githubusercontent.com/xiaofeilalala/DocsPics/main/imgs/image-20220601215625635.png)
 
@@ -156,6 +156,12 @@ npm config set cache "D:\nodejs\node_cache"
 ```shell
 # 查看npm registry 包下载源
 npm config get registry
+
+# 查看cnpm registry 包下载源
+cnpm config get registry
+
+# 查看yarn registry 包下载源
+yarn config get registry
 
 # 更换镜像为淘宝镜像
 npm config set registry https://registry.npm.taobao.org/
